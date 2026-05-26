@@ -68,8 +68,7 @@ const registryLayer = (opts: RegistryLayerOptions = {}) =>
       Layer.provide(FetchHttpClient.layer),
       Layer.provide(Format.defaultLayer),
       Layer.provide(node),
-      Layer.provide(Ripgrep.defaultLayer),
-      Layer.provide(Truncate.defaultLayer),
+      Layer.provide(Layer.mergeAll(Ripgrep.defaultLayer, Truncate.defaultLayer)),
     )
     .pipe(Layer.provide(RuntimeFlags.layer(opts.flags ?? {})))
 

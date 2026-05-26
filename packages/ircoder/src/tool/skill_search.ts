@@ -25,7 +25,7 @@ export const SkillSearchTool = Tool.define(
     return {
       description: DESCRIPTION,
       parameters: Parameters,
-      execute: (params: Schema.Schema.Type<typeof Parameters>, _ctx: Tool.Context) =>
+      execute: (params: Schema.Schema.Type<typeof Parameters>, _ctx: Tool.Context): Effect.Effect<Tool.ExecuteResult> =>
         Effect.gen(function* () {
           if (!(yield* retrieval.enabled())) {
             return {
