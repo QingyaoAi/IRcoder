@@ -57,8 +57,8 @@ export default function StatsHome() {
 
   return (
     <main data-page="stats">
-      <Title>OpenCode Stats</Title>
-      <Meta name="description" content="OpenCode usage, market share, token cost, and session cost stats." />
+      <Title>IRcoder Stats</Title>
+      <Meta name="description" content="IRcoder usage, market share, token cost, and session cost stats." />
       <div data-component="container">
         <Header />
         <div data-component="content">
@@ -88,18 +88,18 @@ function Hero(props: { updatedAt: string | null }) {
   return (
     <section data-section="hero">
       <div>
-        <h1>OpenCode Stats</h1>
+        <h1>IRcoder Stats</h1>
         <p data-slot="meta">
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
             <rect x="3" y="3" width="10" height="10" fill="currentColor" />
             <rect x="7" y="6.5" width="2" height="4.5" fill="var(--stats-layer-2)" />
             <rect x="7" y="5" width="2" height="1" fill="var(--stats-layer-2)" />
           </svg>
-          <span>OpenCode data</span> <b>·</b>{" "}
+          <span>IRcoder data</span> <b>·</b>{" "}
           <em>{props.updatedAt ? `Updated ${formatUpdatedAt(props.updatedAt)}` : "No rows yet"}</em>
         </p>
       </div>
-      <p>See how model usage, provider share, cost, and geography move across OpenCode traffic.</p>
+      <p>See how model usage, provider share, cost, and geography move across IRcoder traffic.</p>
     </section>
   )
 }
@@ -888,31 +888,31 @@ function Newsletter() {
 function Header() {
   return (
     <section data-component="top">
-      <a data-slot="brand" href="https://opencode.ai/" aria-label="OpenCode home">
-        <img data-slot="logo light" src={logoLight} alt="OpenCode" width="234" height="42" />
-        <img data-slot="logo dark" src={logoDark} alt="OpenCode" width="234" height="42" />
+      <a data-slot="brand" href="https://ircoder.ai/" aria-label="IRcoder home">
+        <img data-slot="logo light" src={logoLight} alt="IRcoder" width="234" height="42" />
+        <img data-slot="logo dark" src={logoDark} alt="IRcoder" width="234" height="42" />
       </a>
       <nav data-component="nav-desktop" aria-label="Main navigation">
         <ul>
           <li>
-            <a href="https://github.com/sst/opencode" target="_blank" rel="noreferrer">
+            <a href="https://github.com/sst/ircoder" target="_blank" rel="noreferrer">
               GitHub
             </a>
           </li>
           <li>
-            <a href="https://opencode.ai/docs">Docs</a>
+            <a href="https://ircoder.ai/docs">Docs</a>
           </li>
           <li>
-            <a href="https://opencode.ai/zen">Zen</a>
+            <a href="https://ircoder.ai/zen">Zen</a>
           </li>
           <li>
-            <a href="https://opencode.ai/go">Go</a>
+            <a href="https://ircoder.ai/go">Go</a>
           </li>
           <li>
-            <a href="https://opencode.ai/enterprise">Enterprise</a>
+            <a href="https://ircoder.ai/enterprise">Enterprise</a>
           </li>
           <li>
-            <a href="https://opencode.ai/download" data-slot="cta-button">
+            <a href="https://ircoder.ai/download" data-slot="cta-button">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
                 <path
                   d="M12.1875 9.75L9.00001 12.9375L5.8125 9.75M9.00001 2.0625L9 12.375M14.4375 15.9375H3.5625"
@@ -934,18 +934,18 @@ function Footer() {
   return (
     <footer data-component="footer">
       <div data-slot="cell">
-        <a href="https://github.com/sst/opencode" target="_blank" rel="noreferrer">
+        <a href="https://github.com/sst/ircoder" target="_blank" rel="noreferrer">
           GitHub
         </a>
       </div>
       <div data-slot="cell">
-        <a href="https://opencode.ai/docs">Docs</a>
+        <a href="https://ircoder.ai/docs">Docs</a>
       </div>
       <div data-slot="cell">
-        <a href="https://opencode.ai/changelog">Changelog</a>
+        <a href="https://ircoder.ai/changelog">Changelog</a>
       </div>
       <div data-slot="cell">
-        <a href="https://x.com/opencode_ai">X</a>
+        <a href="https://x.com/ircoder_ai">X</a>
       </div>
     </footer>
   )
@@ -958,13 +958,13 @@ function Legal() {
         ©{new Date().getFullYear()} <a href="https://anoma.ly">Anomaly</a>
       </span>
       <span>
-        <a href="https://opencode.ai/brand">Brand</a>
+        <a href="https://ircoder.ai/brand">Brand</a>
       </span>
       <span>
-        <a href="https://opencode.ai/legal/privacy-policy">Privacy</a>
+        <a href="https://ircoder.ai/legal/privacy-policy">Privacy</a>
       </span>
       <span>
-        <a href="https://opencode.ai/legal/terms-of-service">Terms</a>
+        <a href="https://ircoder.ai/legal/terms-of-service">Terms</a>
       </span>
     </div>
   )

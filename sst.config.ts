@@ -19,8 +19,8 @@ export default $config({
                 profile: process.env.GITHUB_ACTIONS
                   ? undefined
                   : input.stage === "production"
-                    ? "opencode-production"
-                    : "opencode-dev",
+                    ? "ircoder-production"
+                    : "ircoder-dev",
               },
             }
           : {}),

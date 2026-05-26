@@ -1,6 +1,6 @@
 import { expect, test, type Page, type Route } from "@playwright/test"
 
-const directory = "C:/OpenCode/ContextResizeRegression"
+const directory = "C:/IRcoder/ContextResizeRegression"
 const projectID = "proj_context_resize_regression"
 const sessionID = "ses_context_resize_regression"
 const title = "Context resize regression"
@@ -224,7 +224,7 @@ async function mockServer(page: Page) {
       return json(route, [])
     if (path === "/provider") return json(route, provider())
     if (path === "/path")
-      return json(route, { state: directory, config: directory, worktree: directory, directory, home: "C:/OpenCode" })
+      return json(route, { state: directory, config: directory, worktree: directory, directory, home: "C:/IRcoder" })
     if (path === "/project") return json(route, [project()])
     if (path === "/project/current") return json(route, project())
     if (path === "/agent") return json(route, [{ name: "build", mode: "primary" }])
@@ -273,7 +273,7 @@ function provider() {
     all: [
       {
         id: "ircoder",
-        name: "OpenCode",
+        name: "IRcoder",
         models: { "claude-opus-4-6": { id: "claude-opus-4-6", name: "Claude Opus 4.6", limit: { context: 200_000 } } },
       },
     ],

@@ -1,6 +1,6 @@
-# OpenCode Desktop
+# IRcoder Desktop
 
-The OpenCode Desktop app, built with Electron.
+The IRcoder Desktop app, built with Electron.
 
 ## Development
 

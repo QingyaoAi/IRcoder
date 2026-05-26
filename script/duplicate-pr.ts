@@ -35,7 +35,7 @@ Examples:
     process.exit(1)
   }
 
-  const opencode = await createIrcoder({ port: 0 })
+  const ircoder = await createIrcoder({ port: 0 })
 
   try {
     const parts: Array<{ type: "text"; text: string } | { type: "file"; url: string; filename: string; mime: string }> =
@@ -58,8 +58,8 @@ Examples:
 
     parts.push({ type: "text", text: message })
 
-    const session = await opencode.client.session.create()
-    const result = await opencode.client.session
+    const session = await ircoder.client.session.create()
+    const result = await ircoder.client.session
       .prompt({
         path: { id: session.data!.id },
         body: {
@@ -72,7 +72,7 @@ Examples:
 
     console.log(result.trim())
   } finally {
-    opencode.server.close()
+    ircoder.server.close()
   }
 }
 

@@ -32,7 +32,7 @@ describe("ZenmuxPlugin", () => {
         })
       })
       const result = yield* catalog.provider.get(ProviderV2.ID.make("zenmux"))
-      expect(result.options.headers).toEqual({ "HTTP-Referer": "https://opencode.ai/", "X-Title": "ircoder" })
+      expect(result.options.headers).toEqual({ "HTTP-Referer": "https://ircoder.ai/", "X-Title": "ircoder" })
       expect(Object.keys(result.options.headers).sort()).toEqual(["HTTP-Referer", "X-Title"])
     }),
   )
@@ -56,7 +56,7 @@ describe("ZenmuxPlugin", () => {
 
       expect((yield* catalog.provider.get(ProviderV2.ID.make("zenmux"))).options.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
       })
     }),

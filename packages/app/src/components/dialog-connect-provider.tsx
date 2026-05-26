@@ -426,7 +426,7 @@ export function DialogConnectProvider(props: { provider: string }) {
               <div class="text-14-regular text-text-base">{language.t("provider.connect.ircoderZen.line2")}</div>
               <div class="text-14-regular text-text-base">
                 {language.t("provider.connect.ircoderZen.visit.prefix")}
-                <Link href="https://opencode.ai/zen" tabIndex={-1}>
+                <Link href="https://ircoder.ai/zen" tabIndex={-1}>
                   {language.t("provider.connect.ircoderZen.visit.link")}
                 </Link>
                 {language.t("provider.connect.ircoderZen.visit.suffix")}

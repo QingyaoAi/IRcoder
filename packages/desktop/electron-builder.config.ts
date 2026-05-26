@@ -27,7 +27,7 @@ const channel = (() => {
 })()
 
 const getBase = (): Configuration => ({
-  artifactName: "opencode-desktop-${os}-${arch}.${ext}",
+  artifactName: "ircoder-desktop-${os}-${arch}.${ext}",
   directories: {
     output: "dist",
     buildResources: "resources",
@@ -54,8 +54,8 @@ const getBase = (): Configuration => ({
     sign: true,
   },
   protocols: {
-    name: "OpenCode",
-    schemes: ["opencode"],
+    name: "IRcoder",
+    schemes: ["ircoder"],
   },
   win: {
     icon: `resources/icons/icon.ico`,
@@ -86,28 +86,28 @@ function getConfig() {
       return {
         ...base,
         appId: "ai.ircoder.desktop.dev",
-        productName: "OpenCode Dev",
-        rpm: { packageName: "opencode-dev" },
+        productName: "IRcoder Dev",
+        rpm: { packageName: "ircoder-dev" },
       }
     }
     case "beta": {
       return {
         ...base,
         appId: "ai.ircoder.desktop.beta",
-        productName: "OpenCode Beta",
-        protocols: { name: "OpenCode Beta", schemes: ["opencode"] },
-        publish: { provider: "github", owner: "anomalyco", repo: "opencode-beta", channel: "latest" },
-        rpm: { packageName: "opencode-beta" },
+        productName: "IRcoder Beta",
+        protocols: { name: "IRcoder Beta", schemes: ["ircoder"] },
+        publish: { provider: "github", owner: "anomalyco", repo: "ircoder-beta", channel: "latest" },
+        rpm: { packageName: "ircoder-beta" },
       }
     }
     case "prod": {
       return {
         ...base,
         appId: "ai.ircoder.desktop",
-        productName: "OpenCode",
-        protocols: { name: "OpenCode", schemes: ["opencode"] },
-        publish: { provider: "github", owner: "anomalyco", repo: "opencode", channel: "latest" },
-        rpm: { packageName: "opencode" },
+        productName: "IRcoder",
+        protocols: { name: "IRcoder", schemes: ["ircoder"] },
+        publish: { provider: "github", owner: "anomalyco", repo: "ircoder", channel: "latest" },
+        rpm: { packageName: "ircoder" },
       }
     }
   }

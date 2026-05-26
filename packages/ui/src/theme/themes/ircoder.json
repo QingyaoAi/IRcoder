@@ -1,7 +1,7 @@
 {
-  "$schema": "https://opencode.ai/desktop-theme.json",
-  "name": "OpenCode",
-  "id": "opencode",
+  "$schema": "https://ircoder.ai/desktop-theme.json",
+  "name": "IRcoder",
+  "id": "ircoder",
   "light": {
     "palette": {
       "neutral": "#ffffff",

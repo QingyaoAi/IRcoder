@@ -3,7 +3,7 @@ import { defineConfig } from "electron-vite"
 import appPlugin from "@ircoder/app/vite"
 import * as fs from "node:fs/promises"
 
-const IRCODER_SERVER_DIST = "../opencode/dist/node"
+const IRCODER_SERVER_DIST = "../ircoder/dist/node"
 
 const channel = (() => {
   const raw = process.env.IRCODER_CHANNEL
@@ -44,21 +44,21 @@ export default defineConfig({
     },
     plugins: [
       {
-        name: "opencode:node-pty-narrower",
+        name: "ircoder:node-pty-narrower",
         enforce: "pre",
         resolveId(s) {
           if (s === "@lydell/node-pty") return nodePtyPkg
         },
       },
       {
-        name: "opencode:virtual-server-module",
+        name: "ircoder:virtual-server-module",
         enforce: "pre",
         resolveId(id) {
-          if (id === "virtual:opencode-server") return this.resolve(`${IRCODER_SERVER_DIST}/node.js`)
+          if (id === "virtual:ircoder-server") return this.resolve(`${IRCODER_SERVER_DIST}/node.js`)
         },
       },
       {
-        name: "opencode:copy-server-assets",
+        name: "ircoder:copy-server-assets",
         async writeBundle() {
           for (const l of await fs.readdir(IRCODER_SERVER_DIST)) {
             if (!l.endsWith(".wasm")) continue

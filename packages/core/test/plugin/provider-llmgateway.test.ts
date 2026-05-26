@@ -43,7 +43,7 @@ describe("LLMGatewayPlugin", () => {
       })
       expect((yield* catalog.provider.get(ProviderV2.ID.make("llmgateway"))).options.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
         "X-Source": "ircoder",
       })

@@ -20,7 +20,7 @@ COPY packages/enterprise/package.json ./packages/enterprise/package.json
 COPY packages/function/package.json ./packages/function/package.json
 COPY packages/http-recorder/package.json ./packages/http-recorder/package.json
 COPY packages/llm/package.json ./packages/llm/package.json
-COPY packages/opencode/package.json ./packages/opencode/package.json
+COPY packages/ircoder/package.json ./packages/ircoder/package.json
 COPY packages/plugin/package.json ./packages/plugin/package.json
 COPY packages/script/package.json ./packages/script/package.json
 COPY packages/sdk/js/package.json ./packages/sdk/js/package.json

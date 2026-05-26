@@ -32,3 +32,4 @@ logs/
 tsconfig.tsbuildinfo
 settings.json
 API_config.json
+.ircoder/ircoder.jsonc

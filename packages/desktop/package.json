@@ -4,10 +4,10 @@
   "version": "1.15.10",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://opencode.ai",
+  "homepage": "https://ircoder.ai",
   "author": {
     "name": "IRcoder",
-    "email": "hello@opencode.ai"
+    "email": "hello@ircoder.ai"
   },
   "scripts": {
     "typecheck": "tsgo -b",

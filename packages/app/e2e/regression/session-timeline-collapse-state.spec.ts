@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page, type Route } from "@playwright/test"
 
-const directory = "C:/OpenCode/TimelineStateRegression"
+const directory = "C:/IRcoder/TimelineStateRegression"
 const projectID = "proj_timeline_state_regression"
 const sessionID = "ses_timeline_state_regression"
 const userMessageID = "msg_user_regression"
@@ -322,7 +322,7 @@ async function mockServer(page: Page, events: EventPayload[]) {
       return json(route, [])
     if (path === "/provider") return json(route, provider())
     if (path === "/path")
-      return json(route, { state: directory, config: directory, worktree: directory, directory, home: "C:/OpenCode" })
+      return json(route, { state: directory, config: directory, worktree: directory, directory, home: "C:/IRcoder" })
     if (path === "/project") return json(route, [project()])
     if (path === "/project/current") return json(route, project())
     if (path === "/agent") return json(route, [{ name: "build", mode: "primary" }])
@@ -363,7 +363,7 @@ function provider() {
     all: [
       {
         id: "ircoder",
-        name: "OpenCode",
+        name: "IRcoder",
         models: { "claude-opus-4-6": { id: "claude-opus-4-6", name: "Claude Opus 4.6", limit: { context: 200_000 } } },
       },
     ],

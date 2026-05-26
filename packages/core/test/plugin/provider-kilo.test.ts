@@ -36,7 +36,7 @@ describe("KiloPlugin", () => {
       })
       expect((yield* catalog.provider.get(ProviderV2.ID.make("kilo"))).options.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
       })
       expect((yield* catalog.provider.get(ProviderV2.ID.openrouter)).options.headers).toEqual({})
@@ -60,7 +60,7 @@ describe("KiloPlugin", () => {
 
       const result = yield* catalog.provider.get(ProviderV2.ID.make("kilo"))
       expect(result.options.headers).toEqual({
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
       })
       expect(result.options.headers).not.toHaveProperty("http-referer")
@@ -91,7 +91,7 @@ describe("KiloPlugin", () => {
       })
 
       expect((yield* catalog.provider.get(ProviderV2.ID.make("kilo"))).options.headers).toEqual({
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
       })
       expect((yield* catalog.provider.get(ProviderV2.ID.make("custom-kilo"))).options.headers).toEqual({})

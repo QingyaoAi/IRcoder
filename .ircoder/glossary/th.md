@@ -2,13 +2,13 @@
 
 ## Sources
 
-- PR #10809: https://github.com/anomalyco/opencode/pull/10809
-- PR #11496: https://github.com/anomalyco/opencode/pull/11496
+- PR #10809: https://github.com/anomalyco/ircoder/pull/10809
+- PR #11496: https://github.com/anomalyco/ircoder/pull/11496
 
 ## Do Not Translate (Locale Additions)
 
-- `OpenCode` (preserve casing in prose; keep `opencode` only in commands, package names, paths, or code)
-- `OpenCode CLI`
+- `IRcoder` (preserve casing in prose; keep `ircoder` only in commands, package names, paths, or code)
+- `IRcoder CLI`
 - `CLI`, `TUI`, `MCP`, `OAuth`
 - Commands, flags, file paths, and code literals (keep exactly as written)
 

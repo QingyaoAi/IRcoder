@@ -36,9 +36,9 @@ describe("NvidiaPlugin", () => {
       })
       expect((yield* catalog.provider.get(ProviderV2.ID.make("nvidia"))).options.headers).toEqual({
         Existing: "value",
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
-        "X-BILLING-INVOKE-ORIGIN": "OpenCode",
+        "X-BILLING-INVOKE-ORIGIN": "IRcoder",
       })
       expect((yield* catalog.provider.get(ProviderV2.ID.openrouter)).options.headers).toEqual({})
     }),
@@ -62,9 +62,9 @@ describe("NvidiaPlugin", () => {
       })
 
       expect((yield* catalog.provider.get(ProviderV2.ID.make("nvidia"))).options.headers).toEqual({
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
-        "X-BILLING-INVOKE-ORIGIN": "OpenCode",
+        "X-BILLING-INVOKE-ORIGIN": "IRcoder",
       })
     }),
   )
@@ -91,7 +91,7 @@ describe("NvidiaPlugin", () => {
       })
 
       expect((yield* catalog.provider.get(ProviderV2.ID.make("nvidia"))).options.headers).toEqual({
-        "HTTP-Referer": "https://opencode.ai/",
+        "HTTP-Referer": "https://ircoder.ai/",
         "X-Title": "ircoder",
         "X-BILLING-INVOKE-ORIGIN": "CustomOrigin",
       })

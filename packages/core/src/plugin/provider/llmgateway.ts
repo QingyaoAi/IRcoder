@@ -12,7 +12,7 @@ export const LLMGatewayPlugin = PluginV2.define({
           if (item.provider.endpoint.package !== "@ai-sdk/openai-compatible") continue
           if (item.provider.endpoint.url !== "https://api.llmgateway.io/v1") continue
           evt.provider.update(item.provider.id, (provider) => {
-            provider.options.headers["HTTP-Referer"] = "https://opencode.ai/"
+            provider.options.headers["HTTP-Referer"] = "https://ircoder.ai/"
             provider.options.headers["X-Title"] = "ircoder"
             provider.options.headers["X-Source"] = "ircoder"
           })
