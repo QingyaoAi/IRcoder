@@ -6,7 +6,7 @@ export default $config({
     const awsStage = input.stage === "production" ? "production" : "dev"
     const deployAws = input.stage === awsStage
     return {
-      name: "opencode",
+      name: "ircoder",
       removal: input?.stage === "production" ? "retain" : "remove",
       protect: ["production"].includes(input?.stage),
       home: "cloudflare",

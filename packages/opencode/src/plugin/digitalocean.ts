@@ -1,7 +1,7 @@
-import type { Hooks, PluginInput } from "@opencode-ai/plugin"
-import type { Model } from "@opencode-ai/sdk/v2"
-import * as Log from "@opencode-ai/core/util/log"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import type { Hooks, PluginInput } from "@ircoder/plugin"
+import type { Model } from "@ircoder/sdk/v2"
+import * as Log from "@ircoder/core/util/log"
+import { InstallationVersion } from "@ircoder/core/installation/version"
 import { createServer } from "http"
 
 const log = Log.create({ service: "plugin.digitalocean" })
@@ -14,7 +14,7 @@ const OAUTH_PORT = 1456
 const OAUTH_REDIRECT_PATH = "/auth/callback"
 const OAUTH_TOKEN_PATH = "/auth/token"
 const ROUTER_REFRESH_INTERVAL_MS = 5 * 60 * 1000
-const MAK_NAME_PREFIX = "opencode-oauth"
+const MAK_NAME_PREFIX = "ircoder-oauth"
 
 interface ImplicitTokenPayload {
   access_token: string
@@ -233,7 +233,7 @@ async function createModelAccessKey(bearer: string): Promise<ApiKeyInfo> {
     headers: {
       Authorization: `Bearer ${bearer}`,
       "Content-Type": "application/json",
-      "User-Agent": `opencode/${InstallationVersion}`,
+      "User-Agent": `ircoder/${InstallationVersion}`,
     },
     body: JSON.stringify({ name }),
   })
@@ -253,7 +253,7 @@ async function listRouters(
     headers: {
       Authorization: `Bearer ${bearer}`,
       Accept: "application/json",
-      "User-Agent": `opencode/${InstallationVersion}`,
+      "User-Agent": `ircoder/${InstallationVersion}`,
     },
     signal: AbortSignal.timeout(10_000),
   }).catch(() => undefined)
@@ -365,7 +365,7 @@ export async function DigitalOceanAuthPlugin(input: PluginInput): Promise<Hooks>
             return {
               url: buildAuthorizeUrl(state),
               instructions:
-                "Sign in to DigitalOcean in your browser. OpenCode will create a Model Access Key named opencode-oauth-* and load your Inference Routers. Re-run /connect to refresh routers later.",
+                "Sign in to DigitalOcean in your browser. OpenCode will create a Model Access Key named ircoder-oauth-* and load your Inference Routers. Re-run /connect to refresh routers later.",
               method: "auto" as const,
               async callback() {
                 try {

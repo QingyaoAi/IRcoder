@@ -2,9 +2,9 @@ export * from "./gen/types.gen.js"
 
 import { createClient } from "./gen/client/client.gen.js"
 import { type Config } from "./gen/client/types.gen.js"
-import { OpencodeClient } from "./gen/sdk.gen.js"
+import { IrcoderClient } from "./gen/sdk.gen.js"
 import { wrapClientError } from "../error-interceptor.js"
-export { type Config as OpencodeClientConfig, OpencodeClient }
+export { type Config as IrcoderClientConfig, IrcoderClient }
 
 function pick(value: string | null, fallback?: string, encode?: (value: string) => string) {
   if (!value) return
@@ -21,8 +21,8 @@ function rewrite(request: Request, values: { directory?: string; workspace?: str
   let changed = false
 
   for (const [name, key] of [
-    ["x-opencode-directory", "directory"],
-    ["x-opencode-workspace", "workspace"],
+    ["x-ircoder-directory", "directory"],
+    ["x-ircoder-workspace", "workspace"],
   ] as const) {
     const value = pick(
       request.headers.get(name),
@@ -39,12 +39,12 @@ function rewrite(request: Request, values: { directory?: string; workspace?: str
   if (!changed) return request
 
   const next = new Request(url, request)
-  next.headers.delete("x-opencode-directory")
-  next.headers.delete("x-opencode-workspace")
+  next.headers.delete("x-ircoder-directory")
+  next.headers.delete("x-ircoder-workspace")
   return next
 }
 
-export function createOpencodeClient(config?: Config & { directory?: string; experimental_workspaceID?: string }) {
+export function createIrcoderClient(config?: Config & { directory?: string; experimental_workspaceID?: string }) {
   if (!config?.fetch) {
     const customFetch: any = (req: any) => {
       // @ts-ignore
@@ -60,14 +60,14 @@ export function createOpencodeClient(config?: Config & { directory?: string; exp
   if (config?.directory) {
     config.headers = {
       ...config.headers,
-      "x-opencode-directory": encodeURIComponent(config.directory),
+      "x-ircoder-directory": encodeURIComponent(config.directory),
     }
   }
 
   if (config?.experimental_workspaceID) {
     config.headers = {
       ...config.headers,
-      "x-opencode-workspace": config.experimental_workspaceID,
+      "x-ircoder-workspace": config.experimental_workspaceID,
     }
   }
 
@@ -86,5 +86,5 @@ export function createOpencodeClient(config?: Config & { directory?: string; exp
     return response
   })
   client.interceptors.error.use(wrapClientError)
-  return new OpencodeClient({ client })
+  return new IrcoderClient({ client })
 }

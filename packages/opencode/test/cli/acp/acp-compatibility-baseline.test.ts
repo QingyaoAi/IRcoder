@@ -46,7 +46,7 @@ describe("opencode acp verifier compatibility baseline", () => {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -80,7 +80,7 @@ describe("opencode acp verifier compatibility baseline", () => {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -108,7 +108,7 @@ describe("opencode acp verifier compatibility baseline", () => {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -144,7 +144,7 @@ describe("opencode acp verifier compatibility baseline", () => {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -175,7 +175,7 @@ describe("opencode acp verifier compatibility baseline", () => {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(noVariantConfig(llm.url)),
+              IRCODER_CONFIG_CONTENT: JSON.stringify(noVariantConfig(llm.url)),
             },
           }),
         )
@@ -198,7 +198,7 @@ describe("opencode acp verifier compatibility baseline", () => {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url, skills)),
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url, skills)),
             },
           }),
         )

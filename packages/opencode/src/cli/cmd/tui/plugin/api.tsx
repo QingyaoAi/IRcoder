@@ -1,4 +1,4 @@
-import type { TuiDialogSelectOption, TuiPluginApi, TuiRouteDefinition, TuiSlotProps } from "@opencode-ai/plugin/tui"
+import type { TuiDialogSelectOption, TuiPluginApi, TuiRouteDefinition, TuiSlotProps } from "@ircoder/plugin/tui"
 import type { useEvent } from "@tui/context/event"
 import type { useRoute } from "@tui/context/route"
 import type { useSDK } from "@tui/context/sdk"
@@ -6,7 +6,7 @@ import type { useSync } from "@tui/context/sync"
 import type { useTheme } from "@tui/context/theme"
 import { Dialog as DialogUI, type useDialog } from "@tui/ui/dialog"
 import type { TuiConfig } from "@/cli/cmd/tui/config/tui"
-import type { useOpencodeKeymap } from "../keymap"
+import type { useIrcoderKeymap } from "../keymap"
 import type { useKV } from "../context/kv"
 import { DialogAlert } from "../ui/dialog-alert"
 import { DialogConfirm } from "../ui/dialog-confirm"
@@ -15,7 +15,7 @@ import { DialogSelect, type DialogSelectOption as SelectOption } from "../ui/dia
 import { Prompt } from "../component/prompt"
 import { Slot as HostSlot } from "./slots"
 import type { useToast } from "../ui/toast"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import { InstallationVersion } from "@ircoder/core/installation/version"
 import * as Keymap from "../keymap"
 import { createCommandShim } from "./command-shim"
 
@@ -29,7 +29,7 @@ export type RouteMap = Map<string, RouteEntry[]>
 type Input = {
   tuiConfig: TuiConfig.Resolved
   dialog: ReturnType<typeof useDialog>
-  keymap: ReturnType<typeof useOpencodeKeymap>
+  keymap: ReturnType<typeof useIrcoderKeymap>
   kv: ReturnType<typeof useKV>
   route: ReturnType<typeof useRoute>
   routes: RouteMap
@@ -221,10 +221,10 @@ export function createTuiApi(input: Input): TuiPluginApi {
     keymap: input.keymap,
     mode: {
       current() {
-        return Keymap.getOpencodeModeStack(input.keymap).current()
+        return Keymap.getIrcoderModeStack(input.keymap).current()
       },
       push(mode) {
-        return Keymap.getOpencodeModeStack(input.keymap).push(mode)
+        return Keymap.getIrcoderModeStack(input.keymap).push(mode)
       },
     },
     route: {

@@ -1,12 +1,12 @@
-import { Slug } from "@opencode-ai/core/util/slug"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import { Slug } from "@ircoder/core/util/slug"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import path from "path"
 import { BackgroundJob } from "@/background/job"
 import { BusEvent } from "@/bus/bus-event"
 import { Bus } from "@/bus"
 import { Decimal } from "decimal.js"
-import type { ProviderMetadata, Usage } from "@opencode-ai/llm"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import type { ProviderMetadata, Usage } from "@ircoder/llm"
+import { InstallationVersion } from "@ircoder/core/installation/version"
 
 import { Database } from "@/storage/db"
 import { NotFoundError } from "@/storage/storage"
@@ -24,7 +24,7 @@ import type { SQL } from "drizzle-orm"
 import { PartTable, SessionTable } from "./session.sql"
 import { ProjectTable } from "../project/project.sql"
 import { Storage } from "@/storage/storage"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { MessageV2 } from "./message-v2"
 import type { InstanceContext } from "../project/instance-context"
 import { InstanceState } from "@/effect/instance-state"
@@ -36,9 +36,9 @@ import { ModelID, ProviderID } from "@/provider/schema"
 
 import type { Provider } from "@/provider/provider"
 import { Permission } from "@/permission"
-import { Global } from "@opencode-ai/core/global"
+import { Global } from "@ircoder/core/global"
 import { Effect, Layer, Option, Context, Schema, Types } from "effect"
-import { NonNegativeInt, optionalOmitUndefined } from "@opencode-ai/core/schema"
+import { NonNegativeInt, optionalOmitUndefined } from "@ircoder/core/schema"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 
 const log = Log.create({ service: "session" })
@@ -370,7 +370,7 @@ export const Event = {
 
 export function plan(input: { slug: string; time: { created: number } }, instance: InstanceContext) {
   const base = instance.project.vcs
-    ? path.join(instance.worktree, ".opencode", "plans")
+    ? path.join(instance.worktree, ".ircoder", "plans")
     : path.join(Global.Path.data, "plans")
   return path.join(base, [input.time.created, input.slug].join("-") + ".md")
 }
@@ -498,7 +498,7 @@ export interface Interface {
   ) => Effect.Effect<Option.Option<MessageV2.WithParts>, NotFound>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Session") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Session") {}
 
 export const use = serviceUse(Service)
 

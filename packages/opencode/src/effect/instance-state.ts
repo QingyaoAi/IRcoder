@@ -1,11 +1,11 @@
 import { Effect, ScopedCache, Scope } from "effect"
-import * as EffectLogger from "@opencode-ai/core/effect/logger"
+import * as EffectLogger from "@ircoder/core/effect/logger"
 import type { InstanceContext } from "@/project/instance-context"
 import { InstanceRef, WorkspaceRef } from "./instance-ref"
 import { registerDisposer } from "./instance-registry"
 import { WorkspaceContext } from "@/control-plane/workspace-context"
 
-const TypeId = "~opencode/InstanceState"
+const TypeId = "~ircoder/InstanceState"
 
 export interface InstanceState<A, E = never, R = never> {
   readonly [TypeId]: typeof TypeId

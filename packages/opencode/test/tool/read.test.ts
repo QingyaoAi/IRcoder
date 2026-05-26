@@ -2,9 +2,9 @@ import { afterEach, describe, expect } from "bun:test"
 import { Cause, Effect, Exit, Layer, Stream } from "effect"
 import path from "path"
 import { Agent } from "../../src/agent/agent"
-import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
-import { Global } from "@opencode-ai/core/global"
+import { CrossSpawnSpawner } from "@ircoder/core/cross-spawn-spawner"
+import { AppFileSystem } from "@ircoder/core/filesystem"
+import { Global } from "@ircoder/core/global"
 import { Config } from "@/config/config"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { LSP } from "@/lsp/lsp"
@@ -98,15 +98,15 @@ const glob = (p: string) =>
 const githubBase = <A, E, R>(url: string, self: Effect.Effect<A, E, R>) =>
   Effect.acquireUseRelease(
     Effect.sync(() => {
-      const previous = process.env.OPENCODE_REPO_CLONE_GITHUB_BASE_URL
-      process.env.OPENCODE_REPO_CLONE_GITHUB_BASE_URL = url
+      const previous = process.env.IRCODER_REPO_CLONE_GITHUB_BASE_URL
+      process.env.IRCODER_REPO_CLONE_GITHUB_BASE_URL = url
       return previous
     }),
     () => self,
     (previous) =>
       Effect.sync(() => {
-        if (previous) process.env.OPENCODE_REPO_CLONE_GITHUB_BASE_URL = previous
-        else delete process.env.OPENCODE_REPO_CLONE_GITHUB_BASE_URL
+        if (previous) process.env.IRCODER_REPO_CLONE_GITHUB_BASE_URL = previous
+        else delete process.env.IRCODER_REPO_CLONE_GITHUB_BASE_URL
       }),
   )
 const git = Effect.fn("ReadToolTest.git")(function* (cwd: string, args: string[]) {

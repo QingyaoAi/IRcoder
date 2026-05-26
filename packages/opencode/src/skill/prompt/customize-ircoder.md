@@ -1,13 +1,13 @@
 <!--
   Built-in skill. Name and description are registered in code at
-  packages/opencode/src/skill/index.ts (see CUSTOMIZE_OPENCODE_SKILL_NAME
+  packages/ircoder/src/skill/index.ts (see CUSTOMIZE_OPENCODE_SKILL_NAME
   and CUSTOMIZE_OPENCODE_SKILL_DESCRIPTION). The body below becomes the
   skill's content.
 -->
 
-# Customizing opencode
+# Customizing ircoder
 
-opencode validates its own config strictly and refuses to start when a field
+ircoder validates its own config strictly and refuses to start when a field
 is wrong. The shapes below cover the common surface area, but they are a
 **summary, not the source of truth**.
 
@@ -16,22 +16,22 @@ is wrong. The shapes below cover the common surface area, but they are a
 The authoritative list of every config option — with field types, enums,
 defaults, and descriptions — lives in the published JSON Schema:
 
-**<https://opencode.ai/config.json>**
+**<https://ircoder.ai/config.json>**
 
 If a field is not documented in this skill, or you need to confirm an exact
 shape before writing config, **fetch that URL and read the schema directly**
-rather than guessing. opencode hard-fails on invalid config, so the cost of a
+rather than guessing. ircoder hard-fails on invalid config, so the cost of a
 wrong shape is a broken startup.
 
-Independently, every `opencode.json` should declare
-`"$schema": "https://opencode.ai/config.json"` so the user's editor catches
+Independently, every `ircoder.json` should declare
+`"$schema": "https://ircoder.ai/config.json"` so the user's editor catches
 mistakes as they type.
 
 ## Applying changes
 
-Config is loaded once when opencode starts and is not hot-reloaded. After
-saving changes to `opencode.json`, an agent file, a skill, a plugin, or any
-other config-time file, **tell the user to quit and restart opencode** for
+Config is loaded once when ircoder starts and is not hot-reloaded. After
+saving changes to `ircoder.json`, an agent file, a skill, a plugin, or any
+other config-time file, **tell the user to quit and restart ircoder** for
 the changes to take effect. The running session will keep using the
 already-loaded config until then.
 
@@ -39,24 +39,24 @@ already-loaded config until then.
 
 | Scope                         | Path                                                                                                                      |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Project config                | `./opencode.json`, `./opencode.jsonc`, or `.opencode/opencode.json` (opencode walks up from the cwd to the worktree root) |
-| Global config                 | `~/.config/opencode/opencode.json` (NOT `~/.opencode/`)                                                                   |
-| Project agents                | `.opencode/agent/<name>.md` or `.opencode/agents/<name>.md`                                                               |
-| Global agents                 | `~/.config/opencode/agent(s)/<name>.md`                                                                                   |
-| Project skills                | `.opencode/skill(s)/<name>/SKILL.md`                                                                                      |
-| Global skills                 | `~/.config/opencode/skill(s)/<name>/SKILL.md`                                                                             |
+| Project config                | `./ircoder.json`, `./ircoder.jsonc`, or `.ircoder/ircoder.json` (ircoder walks up from the cwd to the worktree root) |
+| Global config                 | `~/.config/ircoder/ircoder.json` (NOT `~/.ircoder/`)                                                                   |
+| Project agents                | `.ircoder/agent/<name>.md` or `.ircoder/agents/<name>.md`                                                               |
+| Global agents                 | `~/.config/ircoder/agent(s)/<name>.md`                                                                                   |
+| Project skills                | `.ircoder/skill(s)/<name>/SKILL.md`                                                                                      |
+| Global skills                 | `~/.config/ircoder/skill(s)/<name>/SKILL.md`                                                                             |
 | External skills (auto-loaded) | `~/.claude/skills/<name>/SKILL.md`, `~/.agents/skills/<name>/SKILL.md`                                                    |
 
 Configs from each scope are deep-merged. Project overrides global. Unknown
-top-level keys in `opencode.json` are rejected with `ConfigInvalidError`.
+top-level keys in `ircoder.json` are rejected with `ConfigInvalidError`.
 
-## opencode.json
+## ircoder.json
 
 Every field is optional.
 
 ```json
 {
-  "$schema": "https://opencode.ai/config.json",
+  "$schema": "https://ircoder.ai/config.json",
   "username": "string",
   "model": "provider/model-id",
   "small_model": "provider/model-id",
@@ -69,7 +69,7 @@ Every field is optional.
   "instructions": ["AGENTS.md", "docs/style.md"],
 
   "skills": {
-    "paths": [".opencode/skills", "/abs/path/to/skills"],
+    "paths": [".ircoder/skills", "/abs/path/to/skills"],
     "urls": ["https://example.com/.well-known/skills/"]
   },
 
@@ -107,10 +107,10 @@ Every field is optional.
   },
 
   "plugin": [
-    "opencode-gemini-auth",
-    "opencode-foo@1.2.3",
+    "ircoder-gemini-auth",
+    "ircoder-foo@1.2.3",
     "./local-plugin.ts",
-    ["opencode-bar", { "option": "value" }]
+    ["ircoder-bar", { "option": "value" }]
   ],
 
   "permission": {
@@ -143,12 +143,12 @@ Shape notes worth being explicit about:
 
 ## Skills
 
-opencode's skill loader scans for `**/SKILL.md` inside skill directories. The
+ircoder's skill loader scans for `**/SKILL.md` inside skill directories. The
 file is named `SKILL.md` exactly, and lives in its own folder named after the
 skill:
 
 ```
-.opencode/skills/my-skill/SKILL.md
+.ircoder/skills/my-skill/SKILL.md
 ```
 
 Frontmatter:
@@ -176,7 +176,7 @@ skills).
 
 Two ways to define an agent. Use the file form for anything non-trivial.
 
-### Inline (in `opencode.json`)
+### Inline (in `ircoder.json`)
 
 ```json
 {
@@ -195,7 +195,7 @@ Two ways to define an agent. Use the file form for anything non-trivial.
 ### File
 
 ```
-.opencode/agent/my-reviewer.md      OR     .opencode/agents/my-reviewer.md
+.ircoder/agent/my-reviewer.md      OR     .ircoder/agents/my-reviewer.md
 ```
 
 ```markdown
@@ -227,7 +227,7 @@ file, `disable: true` in frontmatter.
 
 ### Built-in agents
 
-opencode ships with `build`, `plan`, `general`, `explore`, plus optionally
+ircoder ships with `build`, `plan`, `general`, `explore`, plus optionally
 `scout` (gated on `OPENCODE_EXPERIMENTAL_SCOUT`). Hidden internal agents:
 `compaction`, `title`, `summary`. To override a built-in's fields, define the
 same key in `agent: { <name>: { ... } }`.
@@ -238,16 +238,16 @@ same key in `agent: { <name>: { ... } }`.
 
 ```json
 "plugin": [
-  "opencode-gemini-auth",            // npm spec, latest
-  "opencode-foo@1.2.3",              // npm spec, pinned
+  "ircoder-gemini-auth",            // npm spec, latest
+  "ircoder-foo@1.2.3",              // npm spec, pinned
   "./local-plugin.ts",               // file path, relative to the declaring config
   "file:///abs/path/plugin.js",      // file URL
-  ["opencode-bar", { "key": "val" }] // tuple form with options
+  ["ircoder-bar", { "key": "val" }] // tuple form with options
 ]
 ```
 
 Auto-discovered plugins (no config entry needed): any `*.ts` or `*.js` file in
-`.opencode/plugin/` or `.opencode/plugins/`.
+`.ircoder/plugin/` or `.ircoder/plugins/`.
 
 A plugin module exports `default` (or any named export) of type
 `Plugin = (input: PluginInput, options?) => Promise<Hooks>`. The export is a
@@ -255,7 +255,7 @@ function, not a plain object literal, and the function returns an object
 (return `{}` if there is nothing to register).
 
 ```ts
-import type { Plugin } from "@opencode-ai/plugin"
+import type { Plugin } from "@ircoder-ai/plugin"
 
 export default (async ({ client, project, directory, $ }) => {
   return {
@@ -328,7 +328,7 @@ Actions: `"allow"`, `"ask"`, `"deny"`.
 
 Per-tool value forms: `"allow"` shorthand (treated as `{"*": "allow"}`), or an
 object `{ pattern: action }`. Within an object, **insertion order matters**.
-opencode evaluates the LAST matching rule, so put broad rules first and narrow
+ircoder evaluates the LAST matching rule, so put broad rules first and narrow
 rules last.
 
 `permission: "allow"` (a string at the top level) is shorthand for "allow
@@ -348,13 +348,13 @@ the `plan` agent's permission ruleset (`edit: deny *`).
 
 ## Escape hatches
 
-When a user's config is broken and opencode won't start, these env vars help:
+When a user's config is broken and ircoder won't start, these env vars help:
 
-- `OPENCODE_DISABLE_PROJECT_CONFIG=1`: skip the project's local `opencode.json`
-  and start from globals only. Run from the project directory, opencode loads,
+- `OPENCODE_DISABLE_PROJECT_CONFIG=1`: skip the project's local `ircoder.json`
+  and start from globals only. Run from the project directory, ircoder loads,
   the user edits the broken file, then they restart without the flag.
 - `OPENCODE_CONFIG=/path/to/file.json`: load an additional explicit config.
-- `OPENCODE_CONFIG_CONTENT='{"$schema":"https://opencode.ai/config.json"}'`:
+- `OPENCODE_CONFIG_CONTENT='{"$schema":"https://ircoder.ai/config.json"}'`:
   inject inline JSON as a final local-scope merge.
 - `OPENCODE_DISABLE_DEFAULT_PLUGINS=1`: skip default plugins.
 - `OPENCODE_PURE=1`: skip external plugins entirely.
@@ -366,12 +366,12 @@ When a user's config is broken and opencode won't start, these env vars help:
 
 - Validate against the schema before writing. If you are unsure of a field's
   exact shape, or the field is not covered in this skill, fetch
-  `https://opencode.ai/config.json` and read the schema rather than guessing.
+  `https://ircoder.ai/config.json` and read the schema rather than guessing.
 - Preserve `$schema` and any existing fields the user did not ask to change.
 - For agent, skill, and plugin definitions, prefer creating new files in the
-  correct location over inlining everything in `opencode.json`.
+  correct location over inlining everything in `ircoder.json`.
 - If the user's existing config is malformed, point them at the env-var escape
-  hatches above so they can edit from inside opencode without breaking their
+  hatches above so they can edit from inside ircoder without breaking their
   session.
-- After saving any config change, remind the user to quit and restart opencode
+- After saving any config change, remind the user to quit and restart ircoder
   — running sessions keep using the already-loaded config.

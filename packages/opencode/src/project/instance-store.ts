@@ -1,9 +1,9 @@
 import { GlobalBus } from "@/bus/global"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { WorkspaceContext } from "@/control-plane/workspace-context"
 import { InstanceRef } from "@/effect/instance-ref"
 import { disposeInstance as runDisposers } from "@/effect/instance-registry"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
+import { AppFileSystem } from "@ircoder/core/filesystem"
 import { Context, Deferred, Duration, Effect, Exit, Layer, Scope } from "effect"
 import { type InstanceContext } from "./instance-context"
 import { InstanceBootstrap } from "./bootstrap-service"
@@ -23,7 +23,7 @@ export interface Interface {
   readonly provide: <A, E, R>(input: LoadInput, effect: Effect.Effect<A, E, R>) => Effect.Effect<A, E, R>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/InstanceStore") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/InstanceStore") {}
 
 export const use = serviceUse(Service)
 

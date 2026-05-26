@@ -1,14 +1,14 @@
 import { Effect, Layer, Context, Schema } from "effect"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { ChildProcess } from "effect/unstable/process"
-import { AppProcess } from "@opencode-ai/core/process"
+import { AppProcess } from "@ircoder/core/process"
 import { InstanceState } from "@/effect/instance-state"
 import path from "path"
 import { mergeDeep } from "remeda"
 import { Config } from "@/config/config"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { errorMessage } from "@/util/error"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import * as Formatter from "./formatter"
 
 const log = Log.create({ service: "format" })
@@ -26,7 +26,7 @@ export interface Interface {
   readonly file: (filepath: string) => Effect.Effect<boolean>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Format") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Format") {}
 
 export const use = serviceUse(Service)
 

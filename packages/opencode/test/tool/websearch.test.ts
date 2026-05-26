@@ -14,17 +14,17 @@ describe("websearch provider", () => {
   })
 
   test("supports an operational override", () => {
-    const original = process.env.OPENCODE_WEBSEARCH_PROVIDER
+    const original = process.env.IRCODER_WEBSEARCH_PROVIDER
 
     try {
-      process.env.OPENCODE_WEBSEARCH_PROVIDER = "parallel"
+      process.env.IRCODER_WEBSEARCH_PROVIDER = "parallel"
       expect(selectWebSearchProvider(SESSION_ID)).toBe("parallel")
 
-      process.env.OPENCODE_WEBSEARCH_PROVIDER = "exa"
+      process.env.IRCODER_WEBSEARCH_PROVIDER = "exa"
       expect(selectWebSearchProvider(SESSION_ID)).toBe("exa")
     } finally {
-      if (original === undefined) delete process.env.OPENCODE_WEBSEARCH_PROVIDER
-      else process.env.OPENCODE_WEBSEARCH_PROVIDER = original
+      if (original === undefined) delete process.env.IRCODER_WEBSEARCH_PROVIDER
+      else process.env.IRCODER_WEBSEARCH_PROVIDER = original
     }
   })
 
@@ -37,7 +37,7 @@ describe("websearch provider", () => {
   })
 
   test("is only enabled for opencode or explicit websearch provider flags", () => {
-    expect(webSearchEnabled(ProviderID.opencode, { exa: false, parallel: false })).toBe(true)
+    expect(webSearchEnabled(ProviderID.ircoder, { exa: false, parallel: false })).toBe(true)
     expect(webSearchEnabled(ProviderID.openai, { exa: false, parallel: false })).toBe(false)
     expect(webSearchEnabled(ProviderID.openai, { exa: true, parallel: false })).toBe(true)
     expect(webSearchEnabled(ProviderID.openai, { exa: false, parallel: true })).toBe(true)

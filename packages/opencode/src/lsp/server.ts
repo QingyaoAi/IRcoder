@@ -1,8 +1,8 @@
 import type { ChildProcessWithoutNullStreams } from "child_process"
 import path from "path"
 import os from "os"
-import { Global } from "@opencode-ai/core/global"
-import * as Log from "@opencode-ai/core/util/log"
+import { Global } from "@ircoder/core/global"
+import * as Log from "@ircoder/core/util/log"
 import { text } from "node:stream/consumers"
 import fs from "fs/promises"
 import { Filesystem } from "@/util/filesystem"
@@ -10,9 +10,9 @@ import type { InstanceContext } from "../project/instance-context"
 import { Archive } from "@/util/archive"
 import { Process } from "@/util/process"
 import { which } from "../util/which"
-import { Module } from "@opencode-ai/core/util/module"
+import { Module } from "@ircoder/core/util/module"
 import { spawn } from "./launch"
-import { Npm } from "@opencode-ai/core/npm"
+import { Npm } from "@ircoder/core/npm"
 import type { RuntimeFlags } from "@/effect/runtime-flags"
 
 const log = Log.create({ service: "lsp.server" })
@@ -1267,7 +1267,7 @@ export const JDTLS: Info = {
         }
       })(),
     )
-    const dataDir = await fs.mkdtemp(path.join(os.tmpdir(), "opencode-jdtls-data"))
+    const dataDir = await fs.mkdtemp(path.join(os.tmpdir(), "ircoder-jdtls-data"))
     return {
       process: spawn(
         java,

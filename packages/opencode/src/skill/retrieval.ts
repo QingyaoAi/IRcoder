@@ -3,7 +3,7 @@ import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } fr
 import { withTransientReadRetry } from "@/util/effect-http-client"
 import { InstanceState } from "@/effect/instance-state"
 import { Config } from "@/config/config"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 
 const log = Log.create({ service: "skill-retrieval" })
 
@@ -61,7 +61,7 @@ export interface Interface {
   readonly lastResults: () => Effect.Effect<readonly Hit[]>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/SkillRetrieval") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/SkillRetrieval") {}
 
 function defaultWeights(fields: QueryFields) {
   // Mirror the contract's recommended defaults but zero out fields the caller didn't supply

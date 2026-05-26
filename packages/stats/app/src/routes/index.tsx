@@ -1,6 +1,6 @@
 import "./index.css"
 import { Meta, Title } from "@solidjs/meta"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
+import { ProviderIcon } from "@ircoder/ui/provider-icon"
 import {
   type CountryEntry,
   getStatsHomeData,
@@ -10,8 +10,8 @@ import {
   type SessionCostEntry,
   type TokenCostEntry,
   type UsagePoint,
-} from "@opencode-ai/stats-core/domain/home"
-import { runtime } from "@opencode-ai/stats-core/runtime"
+} from "@ircoder/stats-core/domain/home"
+import { runtime } from "@ircoder/stats-core/runtime"
 import { createAsync, query } from "@solidjs/router"
 import { scaleBand, scaleLinear } from "d3-scale"
 import { createMemo, createSignal, For, Show, type JSX } from "solid-js"

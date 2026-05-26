@@ -1,12 +1,12 @@
-import { TextField } from "@opencode-ai/ui/text-field"
+import { TextField } from "@ircoder/ui/text-field"
 import * as Sentry from "@sentry/solid"
-import { Logo } from "@opencode-ai/ui/logo"
-import { Button } from "@opencode-ai/ui/button"
+import { Logo } from "@ircoder/ui/logo"
+import { Button } from "@ircoder/ui/button"
 import { Component, createSignal, onMount, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { usePlatform } from "@/context/platform"
 import { useLanguage } from "@/context/language"
-import { Icon } from "@opencode-ai/ui/icon"
+import { Icon } from "@ircoder/ui/icon"
 
 export type InitError = {
   name: string

@@ -1,8 +1,8 @@
 import path from "path"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
-import { Global } from "@opencode-ai/core/global"
+import { serviceUse } from "@ircoder/core/effect/service-use"
+import { Global } from "@ircoder/core/global"
 import { Effect, Layer, Context, Option, Schema } from "effect"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
+import { AppFileSystem } from "@ircoder/core/filesystem"
 
 export const Tokens = Schema.Struct({
   accessToken: Schema.mutableKey(Schema.String),
@@ -50,7 +50,7 @@ export interface Interface {
   readonly isTokenExpired: (mcpName: string) => Effect.Effect<boolean | null>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/McpAuth") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/McpAuth") {}
 
 export const use = serviceUse(Service)
 

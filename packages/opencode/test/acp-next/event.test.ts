@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test"
 import type { AgentSideConnection } from "@agentclientprotocol/sdk"
-import type { Event, Message, OpencodeClient, Part, SessionMessageResponse, ToolPart } from "@opencode-ai/sdk/v2"
+import type { Event, Message, IrcoderClient, Part, SessionMessageResponse, ToolPart } from "@ircoder/sdk/v2"
 import { Effect, ManagedRuntime } from "effect"
 import { ACPNextEvent } from "@/acp-next/event"
 import * as ACPNextService from "@/acp-next/service"
@@ -99,7 +99,7 @@ function createHarness(messages: Record<string, SessionMessageResponse> = {}) {
       get: () => Promise.resolve({ data: { id: "ses_loaded" } }),
       messages: () => Promise.resolve({ data: [] }),
     },
-  } as unknown as OpencodeClient
+  } as unknown as IrcoderClient
   const connection = {
     sessionUpdate: (params: SessionUpdateParams) => {
       updates.push(params)
@@ -455,7 +455,7 @@ describe("acp-next event routing", () => {
               ],
             }),
         },
-      } as unknown as OpencodeClient,
+      } as unknown as IrcoderClient,
       connection,
       directory: {
         get: () =>

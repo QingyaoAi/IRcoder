@@ -1,14 +1,14 @@
 import { describe, expect } from "bun:test"
 import { Effect, Layer } from "effect"
-import { AccountV2 } from "@opencode-ai/core/account"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { Location } from "@opencode-ai/core/location"
-import { EventV2 } from "@opencode-ai/core/event"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { PluginV2 } from "@opencode-ai/core/plugin"
-import { AccountPlugin } from "@opencode-ai/core/plugin/account"
-import { CloudflareWorkersAIPlugin } from "@opencode-ai/core/plugin/provider/cloudflare-workers-ai"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+import { AccountV2 } from "@ircoder/core/account"
+import { Catalog } from "@ircoder/core/catalog"
+import { Location } from "@ircoder/core/location"
+import { EventV2 } from "@ircoder/core/event"
+import { ModelV2 } from "@ircoder/core/model"
+import { PluginV2 } from "@ircoder/core/plugin"
+import { AccountPlugin } from "@ircoder/core/plugin/account"
+import { CloudflareWorkersAIPlugin } from "@ircoder/core/plugin/provider/cloudflare-workers-ai"
+import { ProviderV2 } from "@ircoder/core/provider"
 import { testEffect } from "../lib/effect"
 import { fakeSelectorSdk, it, model, npmLayer, withEnv } from "./provider-helper"
 
@@ -207,7 +207,7 @@ describe("CloudflareWorkersAIPlugin", () => {
         const headers = yield* Effect.promise(() => Promise.resolve(cloudflareHeaders(result.sdk)))
         expect(headers.authorization).toBe("Bearer env-key")
         expect(headers.custom).toBe("header")
-        expect(headers["user-agent"]).toMatch(/^opencode\/.* cloudflare-workers-ai \(.+\) ai-sdk\/openai-compatible\//)
+        expect(headers["user-agent"]).toMatch(/^ircoder\/.* cloudflare-workers-ai \(.+\) ai-sdk\/openai-compatible\//)
       }),
     ),
   )

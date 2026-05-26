@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { Effect, Layer, Option, Schema, Context } from "effect"
 
 import { Database } from "@/storage/db"
@@ -37,7 +37,7 @@ export interface Interface {
   }) => Effect.Effect<void, AccountRepoError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/AccountRepo") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/AccountRepo") {}
 
 export const use = serviceUse(Service)
 

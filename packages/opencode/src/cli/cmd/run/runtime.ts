@@ -12,8 +12,8 @@
 //   3. starts the stream transport (SDK event subscription), lazily for fresh
 //      local sessions,
 //   4. runs the prompt queue until the footer closes.
-import { createOpencodeClient } from "@opencode-ai/sdk/v2"
-import { Flag } from "@opencode-ai/core/flag/flag"
+import { createIrcoderClient } from "@ircoder/sdk/v2"
+import { Flag } from "@ircoder/core/flag/flag"
 import { createRunDemo } from "./demo"
 import { resolveDiffStyle, resolveFooterKeybinds, resolveModelInfo, resolveSessionInfo } from "./runtime.boot"
 import { createRuntimeLifecycle } from "./runtime.lifecycle"
@@ -166,9 +166,9 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
   return withRunSpan(
     "RunInteractive.session",
     {
-      "opencode.mode": input.resolveSession ? "local" : "attach",
-      "opencode.initial_input": !!input.initialInput,
-      "opencode.demo": input.demo,
+      "ircoder.mode": input.resolveSession ? "local" : "attach",
+      "ircoder.initial_input": !!input.initialInput,
+      "ircoder.demo": input.demo,
     },
     async (span) => {
       const start = performance.now()
@@ -206,12 +206,12 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
         agent: ctx.agent,
       }
       setRunSpanAttributes(span, {
-        "opencode.directory": ctx.directory,
-        "opencode.resume": ctx.resume === true,
-        "opencode.agent.name": state.agent,
-        "opencode.model.provider": state.model?.providerID,
-        "opencode.model.id": state.model?.modelID,
-        "opencode.model.variant": state.activeVariant,
+        "ircoder.directory": ctx.directory,
+        "ircoder.resume": ctx.resume === true,
+        "ircoder.agent.name": state.agent,
+        "ircoder.model.provider": state.model?.providerID,
+        "ircoder.model.id": state.model?.modelID,
+        "ircoder.model.variant": state.activeVariant,
         "session.id": state.sessionID || undefined,
       })
       const ensureSession = () => {
@@ -228,7 +228,7 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
           state.sessionTitle = next.sessionTitle ?? state.sessionTitle
           state.agent = next.agent
           setRunSpanAttributes(span, {
-            "opencode.agent.name": state.agent,
+            "ircoder.agent.name": state.agent,
             "session.id": state.sessionID,
           })
         })
@@ -286,7 +286,7 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
           state.activeVariant = cycleVariant(state.activeVariant, state.variants)
           saveVariant(state.model, state.activeVariant)
           setRunSpanAttributes(span, {
-            "opencode.model.variant": state.activeVariant,
+            "ircoder.model.variant": state.activeVariant,
           })
           return {
             status: state.activeVariant ? `variant ${state.activeVariant}` : "variant default",
@@ -322,9 +322,9 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
           }
 
           setRunSpanAttributes(span, {
-            "opencode.model.provider": model.providerID,
-            "opencode.model.id": model.modelID,
-            "opencode.model.variant": state.activeVariant,
+            "ircoder.model.provider": model.providerID,
+            "ircoder.model.id": model.modelID,
+            "ircoder.model.variant": state.activeVariant,
           })
           return {
             modelLabel: formatModelLabel(model, state.activeVariant, state.providers),
@@ -349,7 +349,7 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
           state.activeVariant = variant
           saveVariant(state.model, state.activeVariant)
           setRunSpanAttributes(span, {
-            "opencode.model.variant": state.activeVariant,
+            "ircoder.model.variant": state.activeVariant,
           })
           return {
             status: state.activeVariant ? `variant ${state.activeVariant}` : "variant default",
@@ -418,7 +418,7 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
         .then(loadCatalog)
         .catch(() => {})
 
-      if (Flag.OPENCODE_SHOW_TTFD) {
+      if (Flag.IRCODER_SHOW_TTFD) {
         footer.append({
           kind: "system",
           text: `startup ${Math.max(0, Math.round(performance.now() - start))}ms`,
@@ -450,7 +450,7 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
         if (next !== state.activeVariant) {
           state.activeVariant = next
           setRunSpanAttributes(span, {
-            "opencode.model.variant": state.activeVariant,
+            "ircoder.model.variant": state.activeVariant,
           })
         }
 
@@ -562,10 +562,10 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
                       })
                     : undefined
                   setRunSpanAttributes(span, {
-                    "opencode.agent.name": state.agent,
-                    "opencode.model.provider": state.model?.providerID,
-                    "opencode.model.id": state.model?.modelID,
-                    "opencode.model.variant": state.activeVariant,
+                    "ircoder.agent.name": state.agent,
+                    "ircoder.model.provider": state.model?.providerID,
+                    "ircoder.model.id": state.model?.modelID,
+                    "ircoder.model.variant": state.activeVariant,
                     "session.id": state.sessionID,
                   })
                   log?.write("session.new", {
@@ -624,24 +624,24 @@ async function runInteractiveRuntime(input: RunRuntimeInput): Promise<void> {
             return withRunSpan(
               "RunInteractive.turn",
               {
-                "opencode.agent.name": state.agent,
-                "opencode.model.provider": state.model?.providerID,
-                "opencode.model.id": state.model?.modelID,
-                "opencode.model.variant": state.activeVariant,
-                "opencode.prompt.chars": prompt.text.length,
-                "opencode.prompt.parts": prompt.parts.length,
-                "opencode.prompt.include_files": includeFiles,
-                "opencode.prompt.file_parts": includeFiles ? input.files.length : 0,
+                "ircoder.agent.name": state.agent,
+                "ircoder.model.provider": state.model?.providerID,
+                "ircoder.model.id": state.model?.modelID,
+                "ircoder.model.variant": state.activeVariant,
+                "ircoder.prompt.chars": prompt.text.length,
+                "ircoder.prompt.parts": prompt.parts.length,
+                "ircoder.prompt.include_files": includeFiles,
+                "ircoder.prompt.file_parts": includeFiles ? input.files.length : 0,
                 "session.id": state.sessionID || undefined,
               },
               async (span) => {
                 try {
                   const next = await ensureStream()
                   setRunSpanAttributes(span, {
-                    "opencode.agent.name": state.agent,
-                    "opencode.model.provider": state.model?.providerID,
-                    "opencode.model.id": state.model?.modelID,
-                    "opencode.model.variant": state.activeVariant,
+                    "ircoder.agent.name": state.agent,
+                    "ircoder.model.provider": state.model?.providerID,
+                    "ircoder.model.id": state.model?.modelID,
+                    "ircoder.model.variant": state.activeVariant,
                     "session.id": state.sessionID || undefined,
                   })
                   await next.handle.runPromptTurn({
@@ -712,12 +712,12 @@ export async function runInteractiveLocalMode(input: RunLocalInput): Promise<voi
   return withRunSpan(
     "RunInteractive.localMode",
     {
-      "opencode.directory": input.directory,
-      "opencode.initial_input": !!input.initialInput,
-      "opencode.demo": input.demo,
+      "ircoder.directory": input.directory,
+      "ircoder.initial_input": !!input.initialInput,
+      "ircoder.demo": input.demo,
     },
     async () => {
-      const sdk = createOpencodeClient({
+      const sdk = createIrcoderClient({
         baseUrl: "http://opencode.internal",
         fetch: input.fetch,
         directory: input.directory,
@@ -773,8 +773,8 @@ export async function runInteractiveMode(input: RunInput & { createSession?: Cre
   return withRunSpan(
     "RunInteractive.attachMode",
     {
-      "opencode.directory": input.directory,
-      "opencode.initial_input": !!input.initialInput,
+      "ircoder.directory": input.directory,
+      "ircoder.initial_input": !!input.initialInput,
       "session.id": input.sessionID,
     },
     async () =>

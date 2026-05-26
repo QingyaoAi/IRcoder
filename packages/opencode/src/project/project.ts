@@ -3,8 +3,8 @@ import { Database } from "@/storage/db"
 import { ProjectTable } from "./project.sql"
 import { PermissionTable, SessionTable } from "../session/session.sql"
 import { WorkspaceTable } from "../control-plane/workspace.sql"
-import * as Log from "@opencode-ai/core/util/log"
-import { Flag } from "@opencode-ai/core/flag/flag"
+import * as Log from "@ircoder/core/util/log"
+import { Flag } from "@ircoder/core/flag/flag"
 import { BusEvent } from "@/bus/bus-event"
 import { GlobalBus } from "@/bus/global"
 import { which } from "../util/which"
@@ -14,12 +14,12 @@ import { Command } from "@/command"
 import { InstanceState } from "@/effect/instance-state"
 import { Effect, Layer, Scope, Context, Stream, Types, Schema } from "effect"
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
-import { AppProcess } from "@opencode-ai/core/process"
-import { Project as ProjectV2 } from "@opencode-ai/core/project"
-import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
-import { AbsolutePath, NonNegativeInt, optionalOmitUndefined } from "@opencode-ai/core/schema"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import { AppFileSystem } from "@ircoder/core/filesystem"
+import { AppProcess } from "@ircoder/core/process"
+import { Project as ProjectV2 } from "@ircoder/core/project"
+import { CrossSpawnSpawner } from "@ircoder/core/cross-spawn-spawner"
+import { AbsolutePath, NonNegativeInt, optionalOmitUndefined } from "@ircoder/core/schema"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 
 const log = Log.create({ service: "project" })
@@ -133,7 +133,7 @@ export interface Interface {
   readonly removeSandbox: (id: ProjectID, directory: string) => Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Project") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Project") {}
 
 type GitResult = { code: number; text: string; stderr: string }
 
@@ -175,7 +175,7 @@ export const layer = Layer.effect(
         }),
       )
 
-    const fakeVcs = Schema.decodeUnknownSync(Schema.optional(ProjectVcs))(Flag.OPENCODE_FAKE_VCS)
+    const fakeVcs = Schema.decodeUnknownSync(Schema.optional(ProjectVcs))(Flag.IRCODER_FAKE_VCS)
 
     const scope = yield* Scope.Scope
 

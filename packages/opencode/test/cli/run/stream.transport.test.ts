@@ -1,15 +1,15 @@
 import { afterEach, describe, expect, mock, spyOn, test } from "bun:test"
-import { OpencodeClient, type GlobalEvent } from "@opencode-ai/sdk/v2"
+import { IrcoderClient, type GlobalEvent } from "@ircoder/sdk/v2"
 import { createSessionTransport } from "@/cli/cmd/run/stream.transport"
 import type { FooterApi, FooterEvent, RunFilePart, StreamCommit } from "@/cli/cmd/run/types"
 
-type EventStream = Awaited<ReturnType<OpencodeClient["event"]["subscribe"]>>["stream"]
-type GlobalEventStream = Awaited<ReturnType<OpencodeClient["global"]["event"]>>["stream"]
+type EventStream = Awaited<ReturnType<IrcoderClient["event"]["subscribe"]>>["stream"]
+type GlobalEventStream = Awaited<ReturnType<IrcoderClient["global"]["event"]>>["stream"]
 type SdkEvent = EventStream extends AsyncGenerator<infer T, unknown, unknown> ? T : never
-type SessionMessage = NonNullable<Awaited<ReturnType<OpencodeClient["session"]["messages"]>>["data"]>[number]
-type SessionChild = NonNullable<Awaited<ReturnType<OpencodeClient["session"]["children"]>>["data"]>[number]
+type SessionMessage = NonNullable<Awaited<ReturnType<IrcoderClient["session"]["messages"]>>["data"]>[number]
+type SessionChild = NonNullable<Awaited<ReturnType<IrcoderClient["session"]["children"]>>["data"]>[number]
 type SessionToolPart = Extract<SessionMessage["parts"][number], { type: "tool" }>
-type SessionStatusMap = NonNullable<Awaited<ReturnType<OpencodeClient["session"]["status"]>>["data"]>
+type SessionStatusMap = NonNullable<Awaited<ReturnType<IrcoderClient["session"]["status"]>>["data"]>
 type TextPart = Extract<SessionMessage["parts"][number], { type: "text" }>
 
 afterEach(() => {
@@ -392,27 +392,27 @@ function sdk(
   input: {
     stream?: EventStream
     globalStream?: GlobalEventStream
-    subscribe?: OpencodeClient["event"]["subscribe"]
-    globalEvent?: OpencodeClient["global"]["event"]
-    promptAsync?: OpencodeClient["session"]["promptAsync"]
-    status?: OpencodeClient["session"]["status"]
-    messages?: OpencodeClient["session"]["messages"]
-    children?: OpencodeClient["session"]["children"]
-    permissions?: OpencodeClient["permission"]["list"]
-    questions?: OpencodeClient["question"]["list"]
+    subscribe?: IrcoderClient["event"]["subscribe"]
+    globalEvent?: IrcoderClient["global"]["event"]
+    promptAsync?: IrcoderClient["session"]["promptAsync"]
+    status?: IrcoderClient["session"]["status"]
+    messages?: IrcoderClient["session"]["messages"]
+    children?: IrcoderClient["session"]["children"]
+    permissions?: IrcoderClient["permission"]["list"]
+    questions?: IrcoderClient["question"]["list"]
   } = {},
 ) {
-  const client = new OpencodeClient()
+  const client = new IrcoderClient()
 
-  const subscribe: OpencodeClient["event"]["subscribe"] = input.subscribe ?? (() => sse(input.stream ?? emptyStream()))
-  const globalEvent: OpencodeClient["global"]["event"] =
+  const subscribe: IrcoderClient["event"]["subscribe"] = input.subscribe ?? (() => sse(input.stream ?? emptyStream()))
+  const globalEvent: IrcoderClient["global"]["event"] =
     input.globalEvent ?? (() => globalSse(input.globalStream ?? wrapGlobalStream(input.stream ?? emptyStream())))
-  const promptAsync: OpencodeClient["session"]["promptAsync"] = input.promptAsync ?? (() => ok(undefined))
-  const status: OpencodeClient["session"]["status"] = input.status ?? (() => ok({}))
-  const messages: OpencodeClient["session"]["messages"] = input.messages ?? (() => ok([]))
-  const children: OpencodeClient["session"]["children"] = input.children ?? (() => ok([]))
-  const permissions: OpencodeClient["permission"]["list"] = input.permissions ?? (() => ok([]))
-  const questions: OpencodeClient["question"]["list"] = input.questions ?? (() => ok([]))
+  const promptAsync: IrcoderClient["session"]["promptAsync"] = input.promptAsync ?? (() => ok(undefined))
+  const status: IrcoderClient["session"]["status"] = input.status ?? (() => ok({}))
+  const messages: IrcoderClient["session"]["messages"] = input.messages ?? (() => ok([]))
+  const children: IrcoderClient["session"]["children"] = input.children ?? (() => ok([]))
+  const permissions: IrcoderClient["permission"]["list"] = input.permissions ?? (() => ok([]))
+  const questions: IrcoderClient["question"]["list"] = input.questions ?? (() => ok([]))
 
   spyOn(client.event, "subscribe").mockImplementation(subscribe)
   spyOn(client.global, "event").mockImplementation(globalEvent)

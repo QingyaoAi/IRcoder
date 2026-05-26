@@ -1,9 +1,9 @@
 import { lakeAthenaWorkgroup, lakeCatalog, lakeCluster, lakeQueryPermissions, lakeRegion, tableBucket } from "./lake"
 
 const domain = (() => {
-  if ($app.stage === "production") return "stats.opencode.ai"
-  if ($app.stage === "dev") return "stats.dev.opencode.ai"
-  return `stats.${$app.stage}.dev.opencode.ai`
+  if ($app.stage === "production") return "stats.ircoder.ai"
+  if ($app.stage === "dev") return "stats.dev.ircoder.ai"
+  return `stats.${$app.stage}.dev.ircoder.ai`
 })()
 
 ////////////////

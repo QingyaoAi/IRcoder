@@ -5,7 +5,7 @@ import { BusEvent } from "@/bus/bus-event"
 import { InstanceState } from "@/effect/instance-state"
 import { FileWatcher } from "@/file/watcher"
 import { Git } from "@/git"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 
 const log = Log.create({ service: "vcs" })
 const PATCH_CONTEXT_LINES = 2_147_483_647
@@ -303,7 +303,7 @@ interface State {
   root: Git.Base | undefined
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Vcs") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Vcs") {}
 
 export const layer: Layer.Layer<Service, never, Git.Service | Bus.Service> = Layer.effect(
   Service,

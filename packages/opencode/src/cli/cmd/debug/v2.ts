@@ -1,8 +1,8 @@
 import { EOL } from "os"
 import { Effect, Option } from "effect"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { LocationServiceMap } from "@opencode-ai/core/location-layer"
-import { PluginBoot } from "@opencode-ai/core/plugin/boot"
+import { Catalog } from "@ircoder/core/catalog"
+import { LocationServiceMap } from "@ircoder/core/location-layer"
+import { PluginBoot } from "@ircoder/core/plugin/boot"
 import { effectCmd } from "../../effect-cmd"
 
 export const V2Command = effectCmd({

@@ -1,14 +1,14 @@
 import type { AgentSideConnection } from "@agentclientprotocol/sdk"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import type {
   Event,
   EventMessagePartDelta,
   EventMessagePartUpdated,
-  OpencodeClient,
+  IrcoderClient,
   Part,
   SessionMessageResponse,
   ToolPart,
-} from "@opencode-ai/sdk/v2"
+} from "@ircoder/sdk/v2"
 import { Effect } from "effect"
 import { ACPNextSession } from "./session"
 import {
@@ -30,7 +30,7 @@ type GlobalEventStream = {
   stream: AsyncIterable<GlobalEventEnvelope>
 }
 
-export function start(input: { sdk: OpencodeClient; connection: Connection; session: ACPNextSession.Interface }) {
+export function start(input: { sdk: IrcoderClient; connection: Connection; session: ACPNextSession.Interface }) {
   const subscription = new Subscription(input)
   subscription.start()
   return subscription
@@ -44,7 +44,7 @@ export class Subscription {
 
   constructor(
     private readonly input: {
-      sdk: OpencodeClient
+      sdk: IrcoderClient
       connection: Connection
       session: ACPNextSession.Interface
     },

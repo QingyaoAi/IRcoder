@@ -19,15 +19,15 @@ import { SessionSummary } from "./summary"
 import type { Provider } from "@/provider/provider"
 import { Question } from "@/question"
 import { errorMessage } from "@/util/error"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { isRecord } from "@/util/record"
 import { EventV2Bridge } from "@/event-v2-bridge"
-import { SessionEvent } from "@opencode-ai/core/session-event"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+import { SessionEvent } from "@ircoder/core/session-event"
+import { ModelV2 } from "@ircoder/core/model"
+import { ProviderV2 } from "@ircoder/core/provider"
 import * as DateTime from "effect/DateTime"
 import { RuntimeFlags } from "@/effect/runtime-flags"
-import { Usage, type LLMEvent } from "@opencode-ai/llm"
+import { Usage, type LLMEvent } from "@ircoder/llm"
 
 const DOOM_LOOP_THRESHOLD = 3
 const log = Log.create({ service: "session.processor" })
@@ -82,7 +82,7 @@ interface ProcessorContext extends Input {
 
 type StreamEvent = LLMEvent
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/SessionProcessor") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/SessionProcessor") {}
 
 export const layer = Layer.effect(
   Service,

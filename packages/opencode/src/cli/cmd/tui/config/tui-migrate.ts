@@ -3,10 +3,10 @@ import { type ParseError as JsoncParseError, applyEdits, modify, parse as parseJ
 import { unique } from "remeda"
 import { Option, Schema } from "effect"
 import { DiffStyle, ScrollAcceleration, ScrollSpeed } from "./tui-schema"
-import { Flag } from "@opencode-ai/core/flag/flag"
-import { Global } from "@opencode-ai/core/global"
+import { Flag } from "@ircoder/core/flag/flag"
+import { Global } from "@ircoder/core/global"
 import { Filesystem } from "@/util/filesystem"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import * as ConfigPaths from "@/config/paths"
 
 const log = Log.create({ service: "tui.migrate" })
@@ -25,13 +25,13 @@ interface MigrateInput {
 }
 
 /**
- * Migrates tui-specific keys (theme, keybinds, tui) from opencode.json files
+ * Migrates tui-specific keys (theme, keybinds, tui) from ircoder.json files
  * into dedicated tui.json files. Migration is performed per-directory and
  * skips only locations where a tui.json already exists.
  */
 export async function migrateTuiConfig(input: MigrateInput) {
-  const opencode = await opencodeFiles(input)
-  for (const file of opencode) {
+  const ircoder = await ircoderFiles(input)
+  for (const file of ircoder) {
     const source = await Filesystem.readText(file).catch((error) => {
       log.warn("failed to read config for tui migration", { path: file, error })
       return undefined
@@ -134,15 +134,15 @@ async function backupAndStripLegacy(file: string, source: string) {
     })
 }
 
-async function opencodeFiles(input: { directories: string[]; cwd: string }) {
+async function ircoderFiles(input: { directories: string[]; cwd: string }) {
   const files = [
-    ...ConfigPaths.fileInDirectory(Global.Path.config, "opencode"),
-    ...(await Filesystem.findUp(["opencode.json", "opencode.jsonc"], input.cwd, undefined, { rootFirst: true })),
+    ...ConfigPaths.fileInDirectory(Global.Path.config, "ircoder"),
+    ...(await Filesystem.findUp(["ircoder.json", "ircoder.jsonc"], input.cwd, undefined, { rootFirst: true })),
   ]
   for (const dir of unique(input.directories)) {
-    files.push(...ConfigPaths.fileInDirectory(dir, "opencode"))
+    files.push(...ConfigPaths.fileInDirectory(dir, "ircoder"))
   }
-  if (Flag.OPENCODE_CONFIG) files.push(Flag.OPENCODE_CONFIG)
+  if (Flag.IRCODER_CONFIG) files.push(Flag.IRCODER_CONFIG)
 
   const existing = await Promise.all(
     unique(files).map(async (file) => {

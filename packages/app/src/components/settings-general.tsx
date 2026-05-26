@@ -1,13 +1,13 @@
 import { Component, Show, createMemo, createResource, onMount, type JSX } from "solid-js"
 import { createStore } from "solid-js/store"
-import { Button } from "@opencode-ai/ui/button"
-import { Icon } from "@opencode-ai/ui/icon"
-import { Select } from "@opencode-ai/ui/select"
-import { Switch } from "@opencode-ai/ui/switch"
-import { TextField } from "@opencode-ai/ui/text-field"
-import { Tooltip } from "@opencode-ai/ui/tooltip"
-import { useTheme, type ColorScheme } from "@opencode-ai/ui/theme/context"
-import { showToast } from "@opencode-ai/ui/toast"
+import { Button } from "@ircoder/ui/button"
+import { Icon } from "@ircoder/ui/icon"
+import { Select } from "@ircoder/ui/select"
+import { Switch } from "@ircoder/ui/switch"
+import { TextField } from "@ircoder/ui/text-field"
+import { Tooltip } from "@ircoder/ui/tooltip"
+import { useTheme, type ColorScheme } from "@ircoder/ui/theme/context"
+import { showToast } from "@ircoder/ui/toast"
 import { useParams } from "@solidjs/router"
 import { useLanguage } from "@/context/language"
 import { usePermission } from "@/context/permission"
@@ -803,7 +803,7 @@ export const SettingsGeneral: Component = () => {
 
         <DisplaySection />
 
-        <Show when={desktop() && import.meta.env.VITE_OPENCODE_CHANNEL === "beta"}>
+        <Show when={desktop() && import.meta.env.VITE_IRCODER_CHANNEL === "beta"}>
           <AdvancedSection />
         </Show>
       </div>

@@ -1,5 +1,5 @@
-import type * as SDK from "@opencode-ai/sdk/v2"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import type * as SDK from "@ircoder/sdk/v2"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { Effect, Exit, Layer, Option, Schema, Scope, Context, Stream } from "effect"
 import { FetchHttpClient, HttpClient, HttpClientRequest, HttpClientResponse } from "effect/unstable/http"
 import { Account } from "@/account/account"
@@ -13,11 +13,11 @@ import type { SessionID } from "@/session/schema"
 import { Database } from "@/storage/db"
 import { eq } from "drizzle-orm"
 import { Config } from "@/config/config"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { SessionShareTable } from "./share.sql"
 
 const log = Log.create({ service: "share-next" })
-const disabled = process.env["OPENCODE_DISABLE_SHARE"] === "true" || process.env["OPENCODE_DISABLE_SHARE"] === "1"
+const disabled = process.env["IRCODER_DISABLE_SHARE"] === "true" || process.env["IRCODER_DISABLE_SHARE"] === "1"
 
 export type Api = {
   create: string
@@ -75,7 +75,7 @@ export interface Interface {
   readonly remove: (sessionID: SessionID) => Effect.Effect<void, unknown>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ShareNext") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/ShareNext") {}
 
 export const use = serviceUse(Service)
 

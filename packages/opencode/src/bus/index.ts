@@ -1,11 +1,11 @@
 import { Effect, Exit, Layer, PubSub, Scope, Context, Stream, Schema } from "effect"
 import { EffectBridge } from "@/effect/bridge"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { BusEvent } from "./bus-event"
 import { GlobalBus } from "./global"
 import { InstanceState } from "@/effect/instance-state"
 import { makeRuntime } from "@/effect/run-service"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { Identifier } from "@/id/id"
 import type { InstanceContext } from "@/project/instance-context"
 import { InstanceRef } from "@/effect/instance-ref"
@@ -55,7 +55,7 @@ export interface Interface {
   readonly subscribeAllCallback: (callback: (event: any) => unknown) => Effect.Effect<() => void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Bus") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Bus") {}
 
 export const use = serviceUse(Service)
 

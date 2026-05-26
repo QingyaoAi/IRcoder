@@ -1,8 +1,8 @@
-import type { AuthOAuthResult, Hooks } from "@opencode-ai/plugin"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import type { AuthOAuthResult, Hooks } from "@ircoder/plugin"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { Auth } from "@/auth"
 import { InstanceState } from "@/effect/instance-state"
-import { optionalOmitUndefined } from "@opencode-ai/core/schema"
+import { optionalOmitUndefined } from "@ircoder/core/schema"
 import { Plugin } from "../plugin"
 import { ProviderID } from "./schema"
 import { Array as Arr, Effect, Layer, Record, Result, Context, Schema } from "effect"
@@ -101,7 +101,7 @@ interface State {
   pending: Map<ProviderID, AuthOAuthResult>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ProviderAuth") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/ProviderAuth") {}
 
 export const use = serviceUse(Service)
 

@@ -9,7 +9,7 @@ import type {
   SessionConfigSelectOption,
   SetSessionConfigOptionResponse,
 } from "@agentclientprotocol/sdk"
-import type { OpencodeClient } from "@opencode-ai/sdk/v2"
+import type { IrcoderClient } from "@ircoder/sdk/v2"
 import { Effect, ManagedRuntime } from "effect"
 import * as ACPNextService from "@/acp-next/service"
 import * as ACPNextError from "@/acp-next/error"
@@ -199,7 +199,7 @@ describe("ACP next service sessions", () => {
           return Promise.resolve({ data: {} })
         },
       },
-    } as unknown as OpencodeClient
+    } as unknown as IrcoderClient
     const connection = {
       sessionUpdate: (update: unknown) => {
         updates.push(update)
@@ -339,7 +339,7 @@ describe("ACP next service sessions", () => {
       mcp: {
         add: () => Promise.resolve({ data: {} }),
       },
-    } as unknown as OpencodeClient
+    } as unknown as IrcoderClient
     const closing = ACPNextService.make({ sdk, session: sessionService })
     await Effect.runPromise(sessionService.create({ id: "ses_close", cwd: "/workspace" }))
 
@@ -415,7 +415,7 @@ describe("ACP next service sessions", () => {
         command: {
           list: () => Promise.resolve({ data: [] }),
         },
-      } as unknown as OpencodeClient,
+      } as unknown as IrcoderClient,
     })
     const error = await Effect.runPromise(
       service
@@ -453,7 +453,7 @@ describe("ACP next service sessions", () => {
       mcp: {
         add: () => Promise.resolve({ data: {} }),
       },
-    } as unknown as OpencodeClient
+    } as unknown as IrcoderClient
     const service = ACPNextService.make({ sdk })
 
     const first = await Effect.runPromise(
@@ -496,7 +496,7 @@ describe("ACP next service sessions", () => {
           return Promise.resolve({ data: {} })
         },
       },
-    } as unknown as OpencodeClient
+    } as unknown as IrcoderClient
     const service = ACPNextService.make({ sdk })
 
     await Effect.runPromise(
@@ -537,7 +537,7 @@ describe("ACP next service sessions", () => {
       mcp: {
         add: () => Promise.resolve({ data: {} }),
       },
-    } as unknown as OpencodeClient
+    } as unknown as IrcoderClient
     const service = ACPNextService.make({ sdk })
 
     const result = await Effect.runPromise(service.newSession({ cwd: "/workspace", mcpServers: [] }))
@@ -639,7 +639,7 @@ describe("ACP next service sessions", () => {
       mcp: {
         add: () => Promise.resolve({ data: {} }),
       },
-    } as unknown as OpencodeClient
+    } as unknown as IrcoderClient
     const service = ACPNextService.make({ sdk })
     const session = await Effect.runPromise(service.newSession({ cwd: "/workspace", mcpServers: [] }))
 

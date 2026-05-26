@@ -1,133 +1,133 @@
 import { describe, expect } from "bun:test"
 import { DateTime, Effect, Layer, Option } from "effect"
-import { Catalog } from "@opencode-ai/core/catalog"
-import { Location } from "@opencode-ai/core/location"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { PluginV2 } from "@opencode-ai/core/plugin"
-import { OpencodePlugin } from "@opencode-ai/core/plugin/provider/opencode"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+import { Catalog } from "@ircoder/core/catalog"
+import { Location } from "@ircoder/core/location"
+import { ModelV2 } from "@ircoder/core/model"
+import { PluginV2 } from "@ircoder/core/plugin"
+import { IrcoderPlugin } from "@ircoder/core/plugin/provider/ircoder"
+import { ProviderV2 } from "@ircoder/core/provider"
 import { it, model, provider, withEnv } from "./provider-helper"
 
 const cost = (input: number, output = 0) => [{ input, output, cache: { read: 0, write: 0 } }]
 const locationLayer = Layer.succeed(Location.Service, Location.Service.of({ directory: "test" }))
 
-describe("OpencodePlugin", () => {
+describe("IrcoderPlugin", () => {
   it.effect("uses a public key and disables paid models without credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ IRCODER_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
-          const item = provider("opencode")
+          const item = provider("ircoder")
           catalog.provider.update(item.id, () => {})
-          const paid = model("opencode", "paid", { cost: cost(1) })
+          const paid = model("ircoder", "paid", { cost: cost(1) })
           catalog.model.update(item.id, paid.id, (draft) => {
             draft.cost = [...paid.cost]
           })
         })
-        expect((yield* catalog.provider.get(ProviderV2.ID.opencode)).options.aisdk.provider.apiKey).toBe("public")
-        expect((yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(false)
+        expect((yield* catalog.provider.get(ProviderV2.ID.ircoder)).options.aisdk.provider.apiKey).toBe("public")
+        expect((yield* catalog.model.get(ProviderV2.ID.ircoder, ModelV2.ID.make("paid"))).enabled).toBe(false)
       }),
     ),
   )
 
   it.effect("keeps free models without credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ IRCODER_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
-          const item = provider("opencode")
+          const item = provider("ircoder")
           catalog.provider.update(item.id, () => {})
-          const free = model("opencode", "free", { cost: cost(0) })
+          const free = model("ircoder", "free", { cost: cost(0) })
           catalog.model.update(item.id, free.id, (draft) => {
             draft.cost = [...free.cost]
           })
         })
-        expect((yield* catalog.provider.get(ProviderV2.ID.opencode)).options.aisdk.provider.apiKey).toBe("public")
-        expect((yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("free"))).enabled).toBe(true)
+        expect((yield* catalog.provider.get(ProviderV2.ID.ircoder)).options.aisdk.provider.apiKey).toBe("public")
+        expect((yield* catalog.model.get(ProviderV2.ID.ircoder, ModelV2.ID.make("free"))).enabled).toBe(true)
       }),
     ),
   )
 
   it.effect("treats output-only cost as free without credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ IRCODER_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
-          const item = provider("opencode")
+          const item = provider("ircoder")
           catalog.provider.update(item.id, () => {})
-          const outputOnly = model("opencode", "output-only", { cost: cost(0, 1) })
+          const outputOnly = model("ircoder", "output-only", { cost: cost(0, 1) })
           catalog.model.update(item.id, outputOnly.id, (draft) => {
             draft.cost = [...outputOnly.cost]
           })
         })
-        expect((yield* catalog.provider.get(ProviderV2.ID.opencode)).options.aisdk.provider.apiKey).toBe("public")
-        expect((yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("output-only"))).enabled).toBe(true)
+        expect((yield* catalog.provider.get(ProviderV2.ID.ircoder)).options.aisdk.provider.apiKey).toBe("public")
+        expect((yield* catalog.model.get(ProviderV2.ID.ircoder, ModelV2.ID.make("output-only"))).enabled).toBe(true)
       }),
     ),
   )
 
-  it.effect("uses OPENCODE_API_KEY as credentials", () =>
-    withEnv({ OPENCODE_API_KEY: "secret" }, () =>
+  it.effect("uses IRCODER_API_KEY as credentials", () =>
+    withEnv({ IRCODER_API_KEY: "secret" }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
-          const item = provider("opencode")
+          const item = provider("ircoder")
           catalog.provider.update(item.id, () => {})
-          const paid = model("opencode", "paid", { cost: cost(1) })
+          const paid = model("ircoder", "paid", { cost: cost(1) })
           catalog.model.update(item.id, paid.id, (draft) => {
             draft.cost = [...paid.cost]
           })
         })
-        expect((yield* catalog.provider.get(ProviderV2.ID.opencode)).options.aisdk.provider.apiKey).toBeUndefined()
-        expect((yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(true)
+        expect((yield* catalog.provider.get(ProviderV2.ID.ircoder)).options.aisdk.provider.apiKey).toBeUndefined()
+        expect((yield* catalog.model.get(ProviderV2.ID.ircoder, ModelV2.ID.make("paid"))).enabled).toBe(true)
       }),
     ),
   )
 
   it.effect("uses configured provider env vars as credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined, CUSTOM_OPENCODE_API_KEY: "secret" }, () =>
+    withEnv({ IRCODER_API_KEY: undefined, CUSTOM_IRCODER_API_KEY: "secret" }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
-          const item = provider("opencode", { env: ["CUSTOM_OPENCODE_API_KEY"] })
+          const item = provider("ircoder", { env: ["CUSTOM_IRCODER_API_KEY"] })
           catalog.provider.update(item.id, (draft) => {
             draft.env = [...item.env]
           })
-          const paid = model("opencode", "paid", { cost: cost(1) })
+          const paid = model("ircoder", "paid", { cost: cost(1) })
           catalog.model.update(item.id, paid.id, (draft) => {
             draft.cost = [...paid.cost]
           })
         })
-        expect((yield* catalog.provider.get(ProviderV2.ID.opencode)).options.aisdk.provider.apiKey).toBeUndefined()
-        expect((yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(true)
+        expect((yield* catalog.provider.get(ProviderV2.ID.ircoder)).options.aisdk.provider.apiKey).toBeUndefined()
+        expect((yield* catalog.model.get(ProviderV2.ID.ircoder, ModelV2.ID.make("paid"))).enabled).toBe(true)
       }),
     ),
   )
 
   it.effect("uses configured apiKey as credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ IRCODER_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
-          const item = provider("opencode", {
+          const item = provider("ircoder", {
             options: {
               headers: {},
               body: {},
@@ -140,46 +140,46 @@ describe("OpencodePlugin", () => {
           catalog.provider.update(item.id, (draft) => {
             draft.options = item.options
           })
-          const paid = model("opencode", "paid", { cost: cost(1) })
+          const paid = model("ircoder", "paid", { cost: cost(1) })
           catalog.model.update(item.id, paid.id, (draft) => {
             draft.cost = [...paid.cost]
           })
         })
-        expect((yield* catalog.provider.get(ProviderV2.ID.opencode)).options.aisdk.provider.apiKey).toBe("configured")
-        expect((yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(true)
+        expect((yield* catalog.provider.get(ProviderV2.ID.ircoder)).options.aisdk.provider.apiKey).toBe("configured")
+        expect((yield* catalog.model.get(ProviderV2.ID.ircoder, ModelV2.ID.make("paid"))).enabled).toBe(true)
       }),
     ),
   )
 
   it.effect("uses auth-enabled providers as credentials", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+    withEnv({ IRCODER_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
-          const item = provider("opencode", { enabled: { via: "account", service: "opencode" } })
+          const item = provider("ircoder", { enabled: { via: "account", service: "ircoder" } })
           catalog.provider.update(item.id, (draft) => {
             draft.enabled = item.enabled
           })
-          const paid = model("opencode", "paid", { cost: cost(1) })
+          const paid = model("ircoder", "paid", { cost: cost(1) })
           catalog.model.update(item.id, paid.id, (draft) => {
             draft.cost = [...paid.cost]
           })
         })
-        expect((yield* catalog.provider.get(ProviderV2.ID.opencode)).options.aisdk.provider.apiKey).toBeUndefined()
-        expect((yield* catalog.model.get(ProviderV2.ID.opencode, ModelV2.ID.make("paid"))).enabled).toBe(true)
+        expect((yield* catalog.provider.get(ProviderV2.ID.ircoder)).options.aisdk.provider.apiKey).toBeUndefined()
+        expect((yield* catalog.model.get(ProviderV2.ID.ircoder, ModelV2.ID.make("paid"))).enabled).toBe(true)
       }),
     ),
   )
 
-  it.effect("ignores non-opencode providers and models", () =>
-    withEnv({ OPENCODE_API_KEY: undefined }, () =>
+  it.effect("ignores non-ircoder providers and models", () =>
+    withEnv({ IRCODER_API_KEY: undefined }, () =>
       Effect.gen(function* () {
         const plugin = yield* PluginV2.Service
         const catalog = yield* Catalog.Service
-        yield* plugin.add(OpencodePlugin)
+        yield* plugin.add(IrcoderPlugin)
         const load = yield* catalog.loader()
         yield* load((catalog) => {
           const item = provider("openai")
@@ -195,10 +195,10 @@ describe("OpencodePlugin", () => {
     ),
   )
 
-  it.effect("prefers gpt-5-nano as the opencode small model", () =>
+  it.effect("prefers gpt-5-nano as the ircoder small model", () =>
     Effect.gen(function* () {
       const catalog = yield* Catalog.Service
-      const providerID = ProviderV2.ID.opencode
+      const providerID = ProviderV2.ID.ircoder
 
       const load = yield* catalog.loader()
       yield* load((catalog) => {

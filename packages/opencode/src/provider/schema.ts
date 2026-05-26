@@ -1,6 +1,6 @@
 import { Schema } from "effect"
 
-import { withStatics } from "@opencode-ai/core/schema"
+import { withStatics } from "@ircoder/core/schema"
 
 const providerIdSchema = Schema.String.pipe(Schema.brand("ProviderID"))
 
@@ -9,7 +9,7 @@ export type ProviderID = typeof providerIdSchema.Type
 export const ProviderID = providerIdSchema.pipe(
   withStatics((schema: typeof providerIdSchema) => ({
     // Well-known providers
-    opencode: schema.make("opencode"),
+    ircoder: schema.make("ircoder"),
     anthropic: schema.make("anthropic"),
     openai: schema.make("openai"),
     google: schema.make("google"),

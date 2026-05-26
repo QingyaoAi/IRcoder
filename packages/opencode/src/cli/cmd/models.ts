@@ -2,7 +2,7 @@ import { EOL } from "os"
 import { Effect } from "effect"
 import { Provider } from "@/provider/provider"
 import { ProviderID } from "../../provider/schema"
-import { ModelsDev } from "@opencode-ai/core/models-dev"
+import { ModelsDev } from "@ircoder/core/models-dev"
 import { effectCmd, fail } from "../effect-cmd"
 import { UI } from "../ui"
 
@@ -54,10 +54,10 @@ export const ModelsCommand = effectCmd({
     }
 
     const ids = Object.keys(providers).sort((a, b) => {
-      const aIsOpencode = a.startsWith("opencode")
-      const bIsOpencode = b.startsWith("opencode")
-      if (aIsOpencode && !bIsOpencode) return -1
-      if (!aIsOpencode && bIsOpencode) return 1
+      const aIsIrcoder = a.startsWith("ircoder")
+      const bIsIrcoder = b.startsWith("ircoder")
+      if (aIsIrcoder && !bIsIrcoder) return -1
+      if (!aIsIrcoder && bIsIrcoder) return 1
       return a.localeCompare(b)
     })
 

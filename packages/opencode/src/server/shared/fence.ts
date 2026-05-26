@@ -3,10 +3,10 @@ import { inArray } from "drizzle-orm"
 import { EventSequenceTable } from "@/sync/event.sql"
 import { Workspace } from "@/control-plane/workspace"
 import type { WorkspaceID } from "@/control-plane/schema"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { Effect } from "effect"
 
-export const HEADER = "x-opencode-sync"
+export const HEADER = "x-ircoder-sync"
 export type State = Record<string, number>
 const log = Log.create({ service: "fence" })
 

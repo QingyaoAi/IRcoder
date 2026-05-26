@@ -1,4 +1,4 @@
-import { NamedError } from "@opencode-ai/core/util/error"
+import { NamedError } from "@ircoder/core/util/error"
 import { errorFormat } from "@/util/error"
 import { isRecord } from "@/util/record"
 
@@ -47,7 +47,7 @@ export function FormatError(input: unknown): string | undefined {
   // MCPFailed: { name: string }
   if (NamedError.hasName(input, "MCPFailed")) {
     const data = isRecord(input) && isRecord(input.data) ? stringField(input.data, "name") : undefined
-    return `MCP server "${data}" failed. Note, opencode does not support MCP authentication yet.`
+    return `MCP server "${data}" failed. Note, ircoder does not support MCP authentication yet.`
   }
 
   // AccountServiceError, AccountTransportError: TaggedErrorClass
@@ -64,8 +64,8 @@ export function FormatError(input: unknown): string | undefined {
     return [
       `Model not found: ${stringField(providerModelNotFound, "providerID")}/${stringField(providerModelNotFound, "modelID")}`,
       ...(suggestions.length ? ["Did you mean: " + suggestions.join(", ")] : []),
-      `Try: \`opencode models\` to list available models`,
-      `Or check your config (opencode.json) provider/model names`,
+      `Try: \`ircoder models\` to list available models`,
+      `Or check your config (ircoder.json) provider/model names`,
     ].join("\n")
   }
 

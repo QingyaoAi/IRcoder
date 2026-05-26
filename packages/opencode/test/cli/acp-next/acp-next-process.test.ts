@@ -16,10 +16,10 @@ import { createAcpClient, expectOk, firstAlternateValue, selectConfigOption } fr
 
 describe("opencode acp-next (subprocess)", () => {
   cliIt.live(
-    "responds to initialize behind OPENCODE_ACP_NEXT",
+    "responds to initialize behind IRCODER_ACP_NEXT",
     ({ opencode }) =>
       Effect.gen(function* () {
-        const acp = createAcpClient(yield* opencode.acp({ env: { OPENCODE_ACP_NEXT: "1" } }))
+        const acp = createAcpClient(yield* opencode.acp({ env: { IRCODER_ACP_NEXT: "1" } }))
         const initialized = expectOk(
           yield* acp.request<InitializeResponse>("initialize", {
             protocolVersion: 1,
@@ -48,7 +48,7 @@ describe("opencode acp-next (subprocess)", () => {
     "authenticate succeeds for the advertised auth method and rejects unknown methods safely",
     ({ opencode }) =>
       Effect.gen(function* () {
-        const acp = createAcpClient(yield* opencode.acp({ env: { OPENCODE_ACP_NEXT: "1" } }))
+        const acp = createAcpClient(yield* opencode.acp({ env: { IRCODER_ACP_NEXT: "1" } }))
         const initialized = expectOk(yield* acp.request<InitializeResponse>("initialize", { protocolVersion: 1 }))
         const methodId = initialized.authMethods?.[0]?.id
         expect(methodId).toBe("opencode-login")
@@ -62,14 +62,14 @@ describe("opencode acp-next (subprocess)", () => {
   )
 
   cliIt.live(
-    "creates and loads sessions behind OPENCODE_ACP_NEXT",
+    "creates and loads sessions behind IRCODER_ACP_NEXT",
     ({ home, llm, opencode }) =>
       Effect.gen(function* () {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_ACP_NEXT: "1",
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(testProviderConfig(llm.url)),
+              IRCODER_ACP_NEXT: "1",
+              IRCODER_CONFIG_CONTENT: JSON.stringify(testProviderConfig(llm.url)),
             },
           }),
         )
@@ -105,14 +105,14 @@ describe("opencode acp-next (subprocess)", () => {
   )
 
   cliIt.live(
-    "switches model through config options behind OPENCODE_ACP_NEXT",
+    "switches model through config options behind IRCODER_ACP_NEXT",
     ({ home, llm, opencode }) =>
       Effect.gen(function* () {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_ACP_NEXT: "1",
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_ACP_NEXT: "1",
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -133,14 +133,14 @@ describe("opencode acp-next (subprocess)", () => {
   )
 
   cliIt.live(
-    "switches effort through config options behind OPENCODE_ACP_NEXT",
+    "switches effort through config options behind IRCODER_ACP_NEXT",
     ({ home, llm, opencode }) =>
       Effect.gen(function* () {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_ACP_NEXT: "1",
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_ACP_NEXT: "1",
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -165,14 +165,14 @@ describe("opencode acp-next (subprocess)", () => {
   )
 
   cliIt.live(
-    "advertises and supports close behind OPENCODE_ACP_NEXT",
+    "advertises and supports close behind IRCODER_ACP_NEXT",
     ({ home, llm, opencode }) =>
       Effect.gen(function* () {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_ACP_NEXT: "1",
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_ACP_NEXT: "1",
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -186,14 +186,14 @@ describe("opencode acp-next (subprocess)", () => {
   )
 
   cliIt.live(
-    "advertises and supports resume behind OPENCODE_ACP_NEXT",
+    "advertises and supports resume behind IRCODER_ACP_NEXT",
     ({ home, llm, opencode }) =>
       Effect.gen(function* () {
         const acp = createAcpClient(
           yield* opencode.acp({
             env: {
-              OPENCODE_ACP_NEXT: "1",
-              OPENCODE_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
+              IRCODER_ACP_NEXT: "1",
+              IRCODER_CONFIG_CONTENT: JSON.stringify(verifierConfig(llm.url)),
             },
           }),
         )
@@ -219,7 +219,7 @@ describe("opencode acp-next (subprocess)", () => {
       Effect.gen(function* () {
         const exitedPromise = yield* Effect.scoped(
           Effect.gen(function* () {
-            const acp = yield* opencode.acp({ env: { OPENCODE_ACP_NEXT: "1" } })
+            const acp = yield* opencode.acp({ env: { IRCODER_ACP_NEXT: "1" } })
             return acp.exited
           }),
         )

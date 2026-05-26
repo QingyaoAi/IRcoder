@@ -1,4 +1,4 @@
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { Effect } from "effect"
 import { effectCmd } from "../effect-cmd"
 import { AgentSideConnection, ndJsonStream } from "@agentclientprotocol/sdk"
@@ -6,7 +6,7 @@ import { ACP } from "@/acp/agent"
 import { ACPNext } from "@/acp-next/agent"
 import { Server } from "@/server/server"
 import { ServerAuth } from "@/server/auth"
-import { createOpencodeClient } from "@opencode-ai/sdk/v2"
+import { createIrcoderClient } from "@ircoder/sdk/v2"
 import { withNetworkOptions, resolveNetworkOptions } from "../network"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 
@@ -23,12 +23,12 @@ export const AcpCommand = effectCmd({
     })
   },
   handler: Effect.fn("Cli.acp")(function* (args) {
-    process.env.OPENCODE_CLIENT = "acp"
+    process.env.IRCODER_CLIENT = "acp"
     const flags = yield* RuntimeFlags.Service
     const opts = yield* resolveNetworkOptions(args)
     const server = yield* Effect.promise(() => Server.listen(opts))
 
-    const sdk = createOpencodeClient({
+    const sdk = createIrcoderClient({
       baseUrl: `http://${server.hostname}:${server.port}`,
       headers: ServerAuth.headers(),
     })

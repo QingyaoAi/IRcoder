@@ -7,13 +7,13 @@ import type { MessageV2 } from "../message-v2"
 import type { Provider } from "@/provider/provider"
 import { ProviderTransform } from "@/provider/transform"
 import { SystemPrompt } from "../system"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import { InstallationVersion } from "@ircoder/core/installation/version"
 import { Effect, Record } from "effect"
 import { jsonSchema, tool as aiTool, type ModelMessage, type Tool } from "ai"
 import type { Plugin } from "@/plugin"
 import { mergeDeep } from "remeda"
 
-const USER_AGENT = `opencode/${InstallationVersion}`
+const USER_AGENT = `ircoder/${InstallationVersion}`
 
 type PrepareInput = {
   readonly user: MessageV2.User
@@ -155,7 +155,7 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
     })
   }
 
-  const opencodeProjectID = input.model.providerID.startsWith("opencode")
+  const ircoderProjectID = input.model.providerID.startsWith("ircoder")
     ? (yield* InstanceState.context).project.id
     : undefined
 
@@ -166,12 +166,12 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
     params,
     messageTransformOptions: options,
     headers: {
-      ...(input.model.providerID.startsWith("opencode")
+      ...(input.model.providerID.startsWith("ircoder")
         ? {
-            ...(opencodeProjectID ? { "x-opencode-project": opencodeProjectID } : {}),
-            "x-opencode-session": input.sessionID,
-            "x-opencode-request": input.user.id,
-            "x-opencode-client": input.flags.client,
+            ...(ircoderProjectID ? { "x-ircoder-project": ircoderProjectID } : {}),
+            "x-ircoder-session": input.sessionID,
+            "x-ircoder-request": input.user.id,
+            "x-ircoder-client": input.flags.client,
             "User-Agent": USER_AGENT,
           }
         : {

@@ -1,4 +1,4 @@
-import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
+import { CrossSpawnSpawner } from "@ircoder/core/cross-spawn-spawner"
 import { Cause, Effect, Exit, Layer } from "effect"
 import { afterEach, describe, expect } from "bun:test"
 import path from "path"
@@ -33,7 +33,7 @@ describe("tool.skill", () => {
   it.live("execute returns skill content block with files", () =>
     provideTmpdirInstance((dir) =>
       Effect.gen(function* () {
-        const skill = path.join(dir, ".opencode", "skill", "tool-skill")
+        const skill = path.join(dir, ".ircoder", "skill", "tool-skill")
         yield* Effect.promise(() =>
           Bun.write(
             path.join(skill, "SKILL.md"),
@@ -50,11 +50,11 @@ Use this skill.
         )
         yield* Effect.promise(() => Bun.write(path.join(skill, "scripts", "demo.txt"), "demo"))
 
-        const home = process.env.OPENCODE_TEST_HOME
-        process.env.OPENCODE_TEST_HOME = dir
+        const home = process.env.IRCODER_TEST_HOME
+        process.env.IRCODER_TEST_HOME = dir
         yield* Effect.addFinalizer(() =>
           Effect.sync(() => {
-            process.env.OPENCODE_TEST_HOME = home
+            process.env.IRCODER_TEST_HOME = home
           }),
         )
 
@@ -94,11 +94,11 @@ Use this skill.
   it.live("execute preserves not found message", () =>
     provideTmpdirInstance((dir) =>
       Effect.gen(function* () {
-        const home = process.env.OPENCODE_TEST_HOME
-        process.env.OPENCODE_TEST_HOME = dir
+        const home = process.env.IRCODER_TEST_HOME
+        process.env.IRCODER_TEST_HOME = dir
         yield* Effect.addFinalizer(() =>
           Effect.sync(() => {
-            process.env.OPENCODE_TEST_HOME = home
+            process.env.IRCODER_TEST_HOME = home
           }),
         )
 

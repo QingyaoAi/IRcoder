@@ -1,4 +1,4 @@
-import { Flag } from "@opencode-ai/core/flag/flag"
+import { Flag } from "@ircoder/core/flag/flag"
 import { Cause, Duration, Effect } from "effect"
 import { TestLLMServer } from "../../lib/llm-server"
 import type { Config } from "../../../src/config/config"
@@ -147,7 +147,7 @@ function withContext<A, E>(
                 time: { created: Date.now() },
                 agent: "build",
                 model: {
-                  providerID: ProviderID.opencode,
+                  providerID: ProviderID.ircoder,
                   modelID: ModelID.make("test"),
                 },
               }
@@ -252,8 +252,8 @@ function fakeLlmConfig(url: string): Partial<Config.Info> {
 
 const resetState = Effect.promise(async () => {
   const modules = await runtime()
-  Flag.OPENCODE_SERVER_PASSWORD = original.OPENCODE_SERVER_PASSWORD
-  Flag.OPENCODE_SERVER_USERNAME = original.OPENCODE_SERVER_USERNAME
+  Flag.IRCODER_SERVER_PASSWORD = original.IRCODER_SERVER_PASSWORD
+  Flag.IRCODER_SERVER_USERNAME = original.IRCODER_SERVER_USERNAME
   await modules.disposeAllInstances()
   await modules.resetDatabase()
   await Bun.sleep(25)

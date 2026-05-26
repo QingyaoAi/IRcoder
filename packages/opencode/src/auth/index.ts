@@ -1,10 +1,10 @@
 import path from "path"
 import { Effect, Layer, Record, Result, Schema, Context } from "effect"
-import { NonNegativeInt } from "@opencode-ai/core/schema"
-import { Global } from "@opencode-ai/core/global"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
+import { NonNegativeInt } from "@ircoder/core/schema"
+import { Global } from "@ircoder/core/global"
+import { AppFileSystem } from "@ircoder/core/filesystem"
 
-export const OAUTH_DUMMY_KEY = "opencode-oauth-dummy-key"
+export const OAUTH_DUMMY_KEY = "ircoder-oauth-dummy-key"
 
 const file = path.join(Global.Path.data, "auth.json")
 
@@ -46,7 +46,7 @@ export interface Interface {
   readonly remove: (key: string) => Effect.Effect<void, AuthError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Auth") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Auth") {}
 
 export const layer = Layer.effect(
   Service,
@@ -55,9 +55,9 @@ export const layer = Layer.effect(
     const decode = Schema.decodeUnknownOption(Info)
 
     const all = Effect.fn("Auth.all")(function* () {
-      if (process.env.OPENCODE_AUTH_CONTENT) {
+      if (process.env.IRCODER_AUTH_CONTENT) {
         try {
-          return JSON.parse(process.env.OPENCODE_AUTH_CONTENT)
+          return JSON.parse(process.env.IRCODER_AUTH_CONTENT)
         } catch (err) {}
       }
 

@@ -23,7 +23,7 @@ async function mountPrompt(input: {
   keybinds: Partial<TuiKeybind.Keybinds>
   onConfirm: (value: string) => void
 }) {
-  const { Global } = await import("@opencode-ai/core/global")
+  const { Global } = await import("@ircoder/core/global")
   const previous = {
     config: Global.Path.config,
     state: Global.Path.state,
@@ -41,7 +41,7 @@ async function mountPrompt(input: {
     { ThemeProvider },
     { TuiConfigProvider },
     { ToastProvider },
-    { OpencodeKeymapProvider, registerOpencodeKeymap },
+    { IrcoderKeymapProvider, registerIrcoderKeymap },
   ] = await Promise.all([
     import("../../../src/cli/cmd/tui/ui/dialog"),
     import("../../../src/cli/cmd/tui/ui/dialog-prompt"),
@@ -59,11 +59,11 @@ async function mountPrompt(input: {
       keybinds: input.keybinds,
       leader_timeout: 1000,
     })
-    const off = registerOpencodeKeymap(keymap, renderer, resolvedConfig)
+    const off = registerIrcoderKeymap(keymap, renderer, resolvedConfig)
     onCleanup(off)
 
     return (
-      <OpencodeKeymapProvider keymap={keymap}>
+      <IrcoderKeymapProvider keymap={keymap}>
         <TuiConfigProvider config={resolvedConfig}>
           <KVProvider>
             <ThemeProvider mode="dark">
@@ -75,7 +75,7 @@ async function mountPrompt(input: {
             </ThemeProvider>
           </KVProvider>
         </TuiConfigProvider>
-      </OpencodeKeymapProvider>
+      </IrcoderKeymapProvider>
     )
   }
 

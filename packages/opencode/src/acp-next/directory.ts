@@ -48,9 +48,9 @@ export interface Interface {
   readonly variants: (snapshot: Snapshot, model: DefaultModel) => ModelVariants | undefined
 }
 
-export class Loader extends Context.Service<Loader, LoaderInterface>()("@opencode/ACPNextDirectoryLoader") {}
+export class Loader extends Context.Service<Loader, LoaderInterface>()("@ircoder/ACPNextDirectoryLoader") {}
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ACPNextDirectory") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/ACPNextDirectory") {}
 
 export const modelKey = (model: DefaultModel) => `${model.providerID}/${model.modelID}`
 

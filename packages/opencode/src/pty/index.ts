@@ -3,14 +3,14 @@ import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { InstanceState } from "@/effect/instance-state"
 import { EffectBridge } from "@/effect/bridge"
-import { lazy } from "@opencode-ai/core/util/lazy"
+import { lazy } from "@ircoder/core/util/lazy"
 import { Plugin } from "@/plugin"
 import { Shell } from "@/shell/shell"
 import type { Proc } from "#pty"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { PtyID } from "./schema"
 import { Effect, Layer, Context, Schema, Types } from "effect"
-import { NonNegativeInt, PositiveInt } from "@opencode-ai/core/schema"
+import { NonNegativeInt, PositiveInt } from "@ircoder/core/schema"
 
 const log = Log.create({ service: "pty" })
 
@@ -116,7 +116,7 @@ export interface Interface {
   >
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Pty") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Pty") {}
 
 export const layer = Layer.effect(
   Service,
@@ -199,7 +199,7 @@ export const layer = Layer.effect(
         ...input.env,
         ...shell.env,
         TERM: "xterm-256color",
-        OPENCODE_TERMINAL: "1",
+        IRCODER_TERMINAL: "1",
       } as Record<string, string>
 
       if (process.platform === "win32") {

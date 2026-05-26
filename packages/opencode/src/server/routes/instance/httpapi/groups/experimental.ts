@@ -3,7 +3,7 @@ import { MCP } from "@/mcp"
 import { ProviderID, ModelID } from "@/provider/schema"
 import { Session } from "@/session/session"
 import { Worktree } from "@/worktree"
-import { NonNegativeInt } from "@opencode-ai/core/schema"
+import { NonNegativeInt } from "@ircoder/core/schema"
 import { Schema } from "effect"
 import { HttpApi, HttpApiEndpoint, HttpApiError, HttpApiGroup, HttpApiSchema, OpenApi } from "effect/unstable/httpapi"
 import { Authorization } from "../middleware/authorization"
@@ -236,7 +236,7 @@ export const ExperimentalApi = HttpApi.make("experimental")
   )
   .annotateMerge(
     OpenApi.annotations({
-      title: "opencode experimental HttpApi",
+      title: "ircoder experimental HttpApi",
       version: "0.0.1",
       description: "Experimental HttpApi surface for selected instance routes.",
     }),

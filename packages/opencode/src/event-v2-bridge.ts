@@ -6,10 +6,10 @@ import { GlobalBus } from "@/bus/global"
 import { InstanceRef, WorkspaceRef } from "@/effect/instance-ref"
 import { InstanceStore } from "@/project/instance-store"
 import { SyncEvent } from "@/sync"
-import { EventV2 } from "@opencode-ai/core/event"
-import "@opencode-ai/core/account"
-import "@opencode-ai/core/catalog"
-import "@opencode-ai/core/session-event"
+import { EventV2 } from "@ircoder/core/event"
+import "@ircoder/core/account"
+import "@ircoder/core/catalog"
+import "@ircoder/core/session-event"
 import { Context, Effect, Layer, Option } from "effect"
 
 export function toSyncDefinition<D extends EventV2.Definition>(definition: D) {
@@ -23,7 +23,7 @@ export function toSyncDefinition<D extends EventV2.Definition>(definition: D) {
   return result as SyncEvent.Definition<D["type"], D["data"], D["data"]>
 }
 
-export class Service extends Context.Service<Service, EventV2.Interface>()("@opencode/EventV2Bridge") {}
+export class Service extends Context.Service<Service, EventV2.Interface>()("@ircoder/EventV2Bridge") {}
 
 export const layer = Layer.effect(
   Service,

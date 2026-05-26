@@ -10,9 +10,9 @@ import { BusEvent } from "@/bus/bus-event"
 import { EventSequenceTable, EventTable } from "./event.sql"
 import { EventID } from "./schema"
 import { Context, Effect, Layer, Schema as EffectSchema } from "effect"
-import type { DeepMutable } from "@opencode-ai/core/schema"
-import { EventV2 } from "@opencode-ai/core/event"
-import { serviceUse } from "@opencode-ai/core/effect/service-use"
+import type { DeepMutable } from "@ircoder/core/schema"
+import { EventV2 } from "@ircoder/core/event"
+import { serviceUse } from "@ircoder/core/effect/service-use"
 import { InstanceState } from "@/effect/instance-state"
 import { RuntimeFlags } from "@/effect/runtime-flags"
 import { EffectBridge } from "@/effect/bridge"
@@ -65,7 +65,7 @@ export interface Interface {
   readonly claim: (aggregateID: string, ownerID: string) => Effect.Effect<void>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/SyncEvent") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/SyncEvent") {}
 
 export const layer = Layer.effect(Service)(
   Effect.gen(function* () {

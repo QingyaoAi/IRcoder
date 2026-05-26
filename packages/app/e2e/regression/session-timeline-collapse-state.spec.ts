@@ -8,7 +8,7 @@ const assistantMessageID = "msg_assistant_regression"
 const editPartID = "prt_0001_edit"
 const textPartID = "prt_9999_text"
 const title = "Timeline collapse state regression"
-const model = { providerID: "opencode", modelID: "claude-opus-4-6", variant: "max" }
+const model = { providerID: "ircoder", modelID: "claude-opus-4-6", variant: "max" }
 
 type EventPayload = {
   directory: string
@@ -362,13 +362,13 @@ function provider() {
   return {
     all: [
       {
-        id: "opencode",
+        id: "ircoder",
         name: "OpenCode",
         models: { "claude-opus-4-6": { id: "claude-opus-4-6", name: "Claude Opus 4.6", limit: { context: 200_000 } } },
       },
     ],
-    connected: ["opencode"],
-    default: { providerID: "opencode", modelID: "claude-opus-4-6" },
+    connected: ["ircoder"],
+    default: { providerID: "ircoder", modelID: "claude-opus-4-6" },
   }
 }
 

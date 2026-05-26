@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@opencode-ai/stats-core",
+  "name": "@ircoder/stats-core",
   "version": "1.14.50",
   "private": true,
   "type": "module",

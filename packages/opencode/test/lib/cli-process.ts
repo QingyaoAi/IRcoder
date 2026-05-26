@@ -6,20 +6,20 @@
 // the original /event race or #27371's invalid-model hang).
 //
 // Configuration flows through opencode's built-in test affordances:
-//   - OPENCODE_CONFIG_CONTENT      : provider config inline, no files to find
-//   - OPENCODE_TEST_HOME           : pins os.homedir() → tmpdir
-//   - OPENCODE_DISABLE_PROJECT_CONFIG : skip walking up for opencode.json
-//   - OPENCODE_PURE                : skip external plugin discovery + install
-//   - OPENCODE_DISABLE_AUTOUPDATE / AUTOCOMPACT / MODELS_FETCH : no background work
+//   - IRCODER_CONFIG_CONTENT      : provider config inline, no files to find
+//   - IRCODER_TEST_HOME           : pins os.homedir() → tmpdir
+//   - IRCODER_DISABLE_PROJECT_CONFIG : skip walking up for opencode.json
+//   - IRCODER_PURE                : skip external plugin discovery + install
+//   - IRCODER_DISABLE_AUTOUPDATE / AUTOCOMPACT / MODELS_FETCH : no background work
 // Plus HOME / XDG_* pointing at the tmpdir for belt-and-suspenders isolation.
 //
 // Today only `opencode.run` is fully wired. The shape supports adding more
 // builders (`opencode.serve(opts)`, `opencode.acp(opts)`, `opencode.auth(...)`)
 // without changing the fixture. Long-lived commands like `serve` will need a
-// different return shape — see the TODO at the bottom of OpencodeCli.
+// different return shape — see the TODO at the bottom of IrcoderCli.
 import { test, type TestOptions } from "bun:test"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
-import { AppProcess } from "@opencode-ai/core/process"
+import { AppFileSystem } from "@ircoder/core/filesystem"
+import { AppProcess } from "@ircoder/core/process"
 import { Deferred, Duration, Effect, Layer, Queue, Scope, Stream } from "effect"
 import { FetchHttpClient, HttpClient } from "effect/unstable/http"
 import { ChildProcess } from "effect/unstable/process"
@@ -59,19 +59,19 @@ function forkStderrDrain(stream: ReadableStream<Uint8Array>, into: string[]) {
 
 function isolatedEnv(home: string, configJson: string): Record<string, string> {
   return {
-    OPENCODE_TEST_HOME: home,
+    IRCODER_TEST_HOME: home,
     HOME: home,
     XDG_CONFIG_HOME: path.join(home, ".config"),
     XDG_DATA_HOME: path.join(home, ".local/share"),
     XDG_STATE_HOME: path.join(home, ".local/state"),
     XDG_CACHE_HOME: path.join(home, ".cache"),
-    OPENCODE_CONFIG_CONTENT: configJson,
-    OPENCODE_DISABLE_PROJECT_CONFIG: "1",
-    OPENCODE_PURE: "1",
-    OPENCODE_DISABLE_AUTOUPDATE: "1",
-    OPENCODE_DISABLE_AUTOCOMPACT: "1",
-    OPENCODE_DISABLE_MODELS_FETCH: "1",
-    OPENCODE_AUTH_CONTENT: "{}",
+    IRCODER_CONFIG_CONTENT: configJson,
+    IRCODER_DISABLE_PROJECT_CONFIG: "1",
+    IRCODER_PURE: "1",
+    IRCODER_DISABLE_AUTOUPDATE: "1",
+    IRCODER_DISABLE_AUTOCOMPACT: "1",
+    IRCODER_DISABLE_MODELS_FETCH: "1",
+    IRCODER_AUTH_CONTENT: "{}",
   }
 }
 
@@ -144,7 +144,7 @@ export type AcpHandle = {
   readonly exited: Promise<number>
 }
 
-export type OpencodeCli = {
+export type IrcoderCli = {
   // High-level: run a single prompt against the test model. Short-lived.
   readonly run: (message: string, opts?: RunOpts) => Effect.Effect<RunResult>
   // Spawn `opencode serve` and wait until it's listening. Long-lived: the
@@ -170,7 +170,7 @@ export type OpencodeCli = {
 export type CliFixture = {
   readonly llm: TestLLMServer["Service"]
   readonly home: string
-  readonly opencode: OpencodeCli
+  readonly opencode: IrcoderCli
 }
 
 // Provisions a TestLLMServer + tmpdir + spawn helper and invokes fn. Cleans
@@ -401,7 +401,7 @@ export function withCliFixture<A, E>(
       } satisfies AcpHandle
     })
 
-    const opencode: OpencodeCli = { run, serve, acp, spawn, expectExit, parseJsonEvents }
+    const opencode: IrcoderCli = { run, serve, acp, spawn, expectExit, parseJsonEvents }
 
     return yield* fn({ llm, home, opencode })
     // FetchHttpClient is provided so test bodies can `yield* HttpClient.HttpClient`

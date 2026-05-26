@@ -3,7 +3,7 @@ import { Bus } from "@/bus"
 import { BusEvent } from "@/bus/bus-event"
 import { InstanceState } from "@/effect/instance-state"
 import { SessionID, MessageID } from "@/session/schema"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { QuestionID } from "./schema"
 
 const log = Log.create({ service: "question" })
@@ -127,7 +127,7 @@ export interface Interface {
   readonly list: () => Effect.Effect<ReadonlyArray<Request>>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Question") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Question") {}
 
 export const layer = Layer.effect(
   Service,

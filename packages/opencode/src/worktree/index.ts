@@ -1,4 +1,4 @@
-import { Global } from "@opencode-ai/core/global"
+import { Global } from "@ircoder/core/global"
 import { InstanceLayer } from "@/project/instance-layer"
 import { InstanceStore } from "@/project/instance-store"
 import { Project } from "@/project/project"
@@ -6,8 +6,8 @@ import { Database } from "@/storage/db"
 import { eq } from "drizzle-orm"
 import { ProjectTable } from "../project/project.sql"
 import type { ProjectID } from "../project/schema"
-import * as Log from "@opencode-ai/core/util/log"
-import { Slug } from "@opencode-ai/core/util/slug"
+import * as Log from "@ircoder/core/util/log"
+import { Slug } from "@ircoder/core/util/slug"
 import { errorMessage } from "../util/error"
 import { BusEvent } from "@/bus/bus-event"
 import { GlobalBus } from "@/bus/global"
@@ -15,8 +15,8 @@ import { Git } from "@/git"
 import { Effect, Layer, Path, Schema, Scope, Context } from "effect"
 import { ChildProcess } from "effect/unstable/process"
 import { NodePath } from "@effect/platform-node"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
-import { AppProcess } from "@opencode-ai/core/process"
+import { AppFileSystem } from "@ircoder/core/filesystem"
+import { AppProcess } from "@ircoder/core/process"
 import { InstanceState } from "@/effect/instance-state"
 
 const log = Log.create({ service: "worktree" })
@@ -142,7 +142,7 @@ export interface Interface {
   readonly reset: (input: ResetInput) => Effect.Effect<boolean, Error>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Worktree") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Worktree") {}
 
 type GitResult = { code: number; text: string; stderr: string }
 
@@ -190,7 +190,7 @@ export const layer: Layer.Layer<
       const ctx = yield* InstanceState.context
       for (const attempt of Array.from({ length: MAX_NAME_ATTEMPTS }, (_, i) => i)) {
         const name = input.name ? (attempt === 0 ? input.name : `${input.name}-${Slug.create()}`) : Slug.create()
-        const branch = input.detached ? undefined : `opencode/${name}`
+        const branch = input.detached ? undefined : `ircoder/${name}`
         const directory = pathSvc.join(input.root, name)
 
         if (yield* fs.exists(directory).pipe(Effect.orDie)) continue

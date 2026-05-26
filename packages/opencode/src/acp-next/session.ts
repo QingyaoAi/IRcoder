@@ -1,5 +1,5 @@
 import type { McpServer } from "@agentclientprotocol/sdk"
-import type { Message, Part } from "@opencode-ai/sdk/v2"
+import type { Message, Part } from "@ircoder/sdk/v2"
 import { Context, Effect, Layer, Ref } from "effect"
 import type { ModelID, ProviderID } from "../provider/schema"
 import * as ACPNextError from "./error"
@@ -87,7 +87,7 @@ export type Interface = {
   readonly tryGetPartMetadata: (input: PartMetadataLookupInput) => Effect.Effect<KnownMessagePartMetadata | undefined>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ACPNext/Session") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/ACPNext/Session") {}
 
 type State = Map<string, Info>
 

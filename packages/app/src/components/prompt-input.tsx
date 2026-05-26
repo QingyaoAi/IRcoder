@@ -1,5 +1,5 @@
-import { useFilteredList } from "@opencode-ai/ui/hooks"
-import { useSpring } from "@opencode-ai/ui/motion-spring"
+import { useFilteredList } from "@ircoder/ui/hooks"
+import { useSpring } from "@ircoder/ui/motion-spring"
 import {
   createEffect,
   on,
@@ -29,14 +29,14 @@ import { useLayout } from "@/context/layout"
 import { useSDK } from "@/context/sdk"
 import { useSync } from "@/context/sync"
 import { useComments } from "@/context/comments"
-import { Button } from "@opencode-ai/ui/button"
-import { DockShellForm, DockTray } from "@opencode-ai/ui/dock-surface"
-import { Icon } from "@opencode-ai/ui/icon"
-import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
-import { Tooltip, TooltipKeybind } from "@opencode-ai/ui/tooltip"
-import { IconButton } from "@opencode-ai/ui/icon-button"
-import { Select } from "@opencode-ai/ui/select"
-import { useDialog } from "@opencode-ai/ui/context/dialog"
+import { Button } from "@ircoder/ui/button"
+import { DockShellForm, DockTray } from "@ircoder/ui/dock-surface"
+import { Icon } from "@ircoder/ui/icon"
+import { ProviderIcon } from "@ircoder/ui/provider-icon"
+import { Tooltip, TooltipKeybind } from "@ircoder/ui/tooltip"
+import { IconButton } from "@ircoder/ui/icon-button"
+import { Select } from "@ircoder/ui/select"
+import { useDialog } from "@ircoder/ui/context/dialog"
 import { ModelSelectorPopover } from "@/components/dialog-select-model"
 import { useProviders } from "@/hooks/use-providers"
 import { useCommand } from "@/context/command"
@@ -64,11 +64,11 @@ import { PromptContextItems } from "./prompt-input/context-items"
 import { PromptImageAttachments } from "./prompt-input/image-attachments"
 import { PromptDragOverlay } from "./prompt-input/drag-overlay"
 import { promptPlaceholder } from "./prompt-input/placeholder"
-import { ImagePreview } from "@opencode-ai/ui/image-preview"
+import { ImagePreview } from "@ircoder/ui/image-preview"
 import { useQueries } from "@tanstack/solid-query"
 import { useQueryOptions } from "@/context/server-sync"
 import { pathKey } from "@/utils/path-key"
-import { getFilename } from "@opencode-ai/core/util/path"
+import { getFilename } from "@ircoder/core/util/path"
 
 interface PromptInputProps {
   class?: string
@@ -1387,7 +1387,7 @@ export const PromptInput: Component<PromptInputProps> = (props) => {
     return getFilename(value)
   }
 
-  const USE_V2_INPUT = import.meta.env.VITE_OPENCODE_CHANNEL !== "prod"
+  const USE_V2_INPUT = import.meta.env.VITE_IRCODER_CHANNEL !== "prod"
 
   return (
     <div class="relative size-full flex flex-col gap-0">

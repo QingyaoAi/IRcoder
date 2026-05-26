@@ -3,7 +3,7 @@ import { Effect, Layer } from "effect"
 import { HttpClient, HttpClientResponse } from "effect/unstable/http"
 import { Retrieval } from "../../src/skill/retrieval"
 import { Config } from "../../src/config/config"
-import { CrossSpawnSpawner } from "@opencode-ai/core/cross-spawn-spawner"
+import { CrossSpawnSpawner } from "@ircoder/core/cross-spawn-spawner"
 import { provideTmpdirInstance } from "../fixture/fixture"
 import { testEffect } from "../lib/effect"
 

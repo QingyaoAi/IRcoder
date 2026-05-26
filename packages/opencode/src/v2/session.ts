@@ -4,16 +4,16 @@ import { WorkspaceID } from "@/control-plane/schema"
 import { and, asc, desc, eq, gt, gte, isNull, like, lt, or, type SQL } from "@/storage/db"
 import * as Database from "@/storage/db"
 import { Context, DateTime, Effect, Layer, Schema } from "effect"
-import { SessionMessage } from "@opencode-ai/core/session-message"
-import type { Prompt } from "@opencode-ai/core/session-prompt"
+import { SessionMessage } from "@ircoder/core/session-message"
+import type { Prompt } from "@ircoder/core/session-prompt"
 import { ProjectID } from "@/project/schema"
-import { SessionEvent } from "@opencode-ai/core/session-event"
-import { V2Schema } from "@opencode-ai/core/v2-schema"
-import { optionalOmitUndefined } from "@opencode-ai/core/schema"
-import { EventV2 } from "@opencode-ai/core/event"
+import { SessionEvent } from "@ircoder/core/session-event"
+import { V2Schema } from "@ircoder/core/v2-schema"
+import { optionalOmitUndefined } from "@ircoder/core/schema"
+import { EventV2 } from "@ircoder/core/event"
 import { EventV2Bridge } from "@/event-v2-bridge"
-import { ModelV2 } from "@opencode-ai/core/model"
-import { ProviderV2 } from "@opencode-ai/core/provider"
+import { ModelV2 } from "@ircoder/core/model"
+import { ProviderV2 } from "@ircoder/core/provider"
 
 export const Delivery = Schema.Literals(["immediate", "deferred"]).annotate({
   identifier: "Session.Delivery",
@@ -134,7 +134,7 @@ export interface Interface {
   readonly wait: (sessionID: SessionID) => Effect.Effect<void, NotFoundError | OperationUnavailableError>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/v2/Session") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/v2/Session") {}
 
 export const layer = Layer.effect(
   Service,

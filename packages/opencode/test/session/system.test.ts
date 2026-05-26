@@ -1,7 +1,7 @@
 import { describe, expect } from "bun:test"
 import { Effect, Layer } from "effect"
 import type { Agent } from "../../src/agent/agent"
-import { NamedError } from "@opencode-ai/core/util/error"
+import { NamedError } from "@ircoder/core/util/error"
 import { Skill } from "../../src/skill"
 import { Retrieval } from "../../src/skill/retrieval"
 import { Permission } from "../../src/permission"

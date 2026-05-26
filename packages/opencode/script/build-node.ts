@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { Script } from "@opencode-ai/script"
+import { Script } from "@ircoder/script"
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -51,9 +51,9 @@ await Bun.build({
   sourcemap: "linked",
   external: ["jsonc-parser", "@lydell/node-pty"],
   define: {
-    OPENCODE_MIGRATIONS: JSON.stringify(migrations),
-    OPENCODE_MODELS_DEV: generated.modelsData,
-    OPENCODE_CHANNEL: `'${Script.channel}'`,
+    IRCODER_MIGRATIONS: JSON.stringify(migrations),
+    IRCODER_MODELS_DEV: generated.modelsData,
+    IRCODER_CHANNEL: `'${Script.channel}'`,
   },
   files: {
     "opencode-web-ui.gen.ts": "",

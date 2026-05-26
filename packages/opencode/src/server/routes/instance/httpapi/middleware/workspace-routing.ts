@@ -7,7 +7,7 @@ import { HttpApiProxy } from "./proxy"
 import * as Fence from "@/server/shared/fence"
 import { getWorkspaceRouteSessionID, isLocalWorkspaceRoute, workspaceProxyURL } from "@/server/shared/workspace-routing"
 import { NotFoundError } from "@/storage/storage"
-import { Flag } from "@opencode-ai/core/flag/flag"
+import { Flag } from "@ircoder/core/flag/flag"
 import { Context, Data, Effect, Layer, Option, Schema } from "effect"
 import { HttpClient, HttpRouter, HttpServerRequest, HttpServerResponse } from "effect/unstable/http"
 import { HttpApiMiddleware } from "effect/unstable/httpapi"
@@ -48,7 +48,7 @@ export class WorkspaceRouteContext extends Context.Service<
     readonly directory: string
     readonly workspaceID?: WorkspaceID
   }
->()("@opencode/ExperimentalHttpApiWorkspaceRouteContext") {}
+>()("@ircoder/ExperimentalHttpApiWorkspaceRouteContext") {}
 
 export class WorkspaceRoutingMiddleware extends HttpApiMiddleware.Service<
   WorkspaceRoutingMiddleware,
@@ -56,14 +56,14 @@ export class WorkspaceRoutingMiddleware extends HttpApiMiddleware.Service<
     provides: WorkspaceRouteContext
     requires: Session.Service
   }
->()("@opencode/ExperimentalHttpApiWorkspaceRouting") {}
+>()("@ircoder/ExperimentalHttpApiWorkspaceRouting") {}
 
 function requestURL(request: HttpServerRequest.HttpServerRequest): URL {
   return new URL(request.url, "http://localhost")
 }
 
 function configuredWorkspaceID(): WorkspaceID | undefined {
-  return Flag.OPENCODE_WORKSPACE_ID ? WorkspaceID.make(Flag.OPENCODE_WORKSPACE_ID) : undefined
+  return Flag.IRCODER_WORKSPACE_ID ? WorkspaceID.make(Flag.IRCODER_WORKSPACE_ID) : undefined
 }
 
 function selectedWorkspaceID(url: URL, sessionWorkspaceID?: WorkspaceID): WorkspaceID | undefined {
@@ -84,7 +84,7 @@ function selectedV2WorkspaceID(
 }
 
 function defaultDirectory(request: HttpServerRequest.HttpServerRequest, url: URL): string {
-  return url.searchParams.get("directory") || request.headers["x-opencode-directory"] || process.cwd()
+  return url.searchParams.get("directory") || request.headers["x-ircoder-directory"] || process.cwd()
 }
 
 function shouldStayOnControlPlane(request: HttpServerRequest.HttpServerRequest, url: URL): boolean {

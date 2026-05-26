@@ -29,9 +29,9 @@ import {
   type SetSessionModeRequest,
   type SetSessionModeResponse,
 } from "@agentclientprotocol/sdk"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
-import * as Log from "@opencode-ai/core/util/log"
-import type { Message, OpencodeClient, SessionMessageResponse } from "@opencode-ai/sdk/v2"
+import { InstallationVersion } from "@ircoder/core/installation/version"
+import * as Log from "@ircoder/core/util/log"
+import type { Message, IrcoderClient, SessionMessageResponse } from "@ircoder/sdk/v2"
 import { Context, Effect, Layer, ManagedRuntime } from "effect"
 import * as ACPNextError from "./error"
 import { buildConfigOptions, parseModelSelection } from "./config-option"
@@ -42,7 +42,7 @@ import { ModelID, ProviderID } from "@/provider/schema"
 import { Provider } from "@/provider/provider"
 import type { Command } from "@/command"
 
-export const AuthMethodID = "opencode-login"
+export const AuthMethodID = "ircoder-login"
 const log = Log.create({ service: "acp-next-service" })
 
 export type Error = ACPNextError.Error
@@ -65,10 +65,10 @@ export type Interface = {
   readonly cancel: (input: CancelNotification) => Effect.Effect<void, Error>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/ACPNext/Service") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/ACPNext/Service") {}
 
 export function make(input: {
-  sdk: OpencodeClient
+  sdk: IrcoderClient
   connection?: Pick<AgentSideConnection, "sessionUpdate">
   directory?: Directory.Interface
   session?: ACPNextSession.Interface
@@ -84,15 +84,15 @@ export function make(input: {
 
   const initialize = Effect.fn("ACPNext.initialize")(function* (params: InitializeRequest) {
     const authMethod: AuthMethod = {
-      description: "Run `opencode auth login` in the terminal",
-      name: "Login with opencode",
+      description: "Run `ircoder auth login` in the terminal",
+      name: "Login with ircoder",
       id: AuthMethodID,
     }
 
     if (params.clientCapabilities?._meta?.["terminal-auth"] === true) {
       authMethod._meta = {
         "terminal-auth": {
-          command: "opencode",
+          command: "ircoder",
           args: ["auth", "login"],
           label: "OpenCode Login",
         },
@@ -458,7 +458,7 @@ function makeSessionService() {
   )
 }
 
-function makeDirectoryService(sdk: OpencodeClient) {
+function makeDirectoryService(sdk: IrcoderClient) {
   return ManagedRuntime.make(
     Directory.layer.pipe(
       Layer.provide(
@@ -519,7 +519,7 @@ function request<T>(fn: () => Promise<T | SdkResponse<T>>, service?: string) {
   })
 }
 
-async function loadDirectorySnapshot(sdk: OpencodeClient, directory: string) {
+async function loadDirectorySnapshot(sdk: IrcoderClient, directory: string) {
   const [providersResponse, agentsResponse, commandsResponse, skillsResponse] = await Promise.all([
     sdk.config.providers({ directory }, { throwOnError: true }),
     sdk.app.agents({ directory }, { throwOnError: true }),
@@ -566,7 +566,7 @@ async function loadDirectorySnapshot(sdk: OpencodeClient, directory: string) {
 }
 
 async function defaultModelFromSdk(
-  sdk: OpencodeClient,
+  sdk: IrcoderClient,
   directory: string,
   providers: Record<ProviderID, Provider.Info>,
 ): Promise<Directory.DefaultModel | undefined> {
@@ -579,9 +579,9 @@ async function defaultModelFromSdk(
   const lastUsed = await lastUsedModel(sdk, directory, providers)
   if (lastUsed) return lastUsed
 
-  const opencodeProvider = providers[ProviderID.make("opencode")]
-  const opencodeModel = opencodeProvider ? Provider.sort(Object.values(opencodeProvider.models))[0] : undefined
-  if (opencodeProvider && opencodeModel) return { providerID: opencodeProvider.id, modelID: opencodeModel.id }
+  const ircoderProvider = providers[ProviderID.make("ircoder")]
+  const ircoderModel = ircoderProvider ? Provider.sort(Object.values(ircoderProvider.models))[0] : undefined
+  if (ircoderProvider && ircoderModel) return { providerID: ircoderProvider.id, modelID: ircoderModel.id }
 
   const best = Provider.sort(Object.values(providers).flatMap((provider) => Object.values(provider.models)))[0]
   if (best) return { providerID: best.providerID, modelID: best.id }
@@ -589,7 +589,7 @@ async function defaultModelFromSdk(
 }
 
 async function lastUsedModel(
-  sdk: OpencodeClient,
+  sdk: IrcoderClient,
   directory: string,
   providers: Record<ProviderID, Provider.Info>,
 ): Promise<Directory.DefaultModel | undefined> {
@@ -683,7 +683,7 @@ function sendAvailableCommands(
 }
 
 function registerMcpServers(
-  sdk: OpencodeClient,
+  sdk: IrcoderClient,
   registered: Map<string, Set<string>>,
   directory: string,
   sessionId: string,

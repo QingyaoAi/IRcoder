@@ -1,13 +1,13 @@
 import "@/index.css"
 import * as Sentry from "@sentry/solid"
-import { I18nProvider } from "@opencode-ai/ui/context"
-import { DialogProvider } from "@opencode-ai/ui/context/dialog"
-import { FileComponentProvider } from "@opencode-ai/ui/context/file"
-import { MarkedProvider } from "@opencode-ai/ui/context/marked"
-import { File } from "@opencode-ai/ui/file"
-import { Font } from "@opencode-ai/ui/font"
-import { Splash } from "@opencode-ai/ui/logo"
-import { ThemeProvider } from "@opencode-ai/ui/theme/context"
+import { I18nProvider } from "@ircoder/ui/context"
+import { DialogProvider } from "@ircoder/ui/context/dialog"
+import { FileComponentProvider } from "@ircoder/ui/context/file"
+import { MarkedProvider } from "@ircoder/ui/context/marked"
+import { File } from "@ircoder/ui/file"
+import { Font } from "@ircoder/ui/font"
+import { Splash } from "@ircoder/ui/logo"
+import { ThemeProvider } from "@ircoder/ui/theme/context"
 import { MetaProvider } from "@solidjs/meta"
 import { type BaseRouterProps, Navigate, Route, Router } from "@solidjs/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query"
@@ -48,7 +48,7 @@ import { ErrorPage } from "./pages/error"
 import { useCheckServerHealth } from "./utils/server-health"
 import { ServersProvider } from "./context/servers"
 
-if (import.meta.env.VITE_OPENCODE_CHANNEL !== "prod") {
+if (import.meta.env.VITE_IRCODER_CHANNEL !== "prod") {
   document.body.classList.remove("text-12-regular")
   document.body.classList.add("font-(family-name:--font-family-text)", "text-[13px]", "font-[440]")
 }
@@ -72,7 +72,7 @@ function UiI18nBridge(props: ParentProps) {
 
 declare global {
   interface Window {
-    __OPENCODE__?: {
+    __IRCODER__?: {
       updaterEnabled?: boolean
       deepLinks?: string[]
       wsl?: boolean

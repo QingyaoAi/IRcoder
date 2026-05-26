@@ -1,7 +1,7 @@
 import path from "path"
 import { Context, Effect, Layer, Schema } from "effect"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
-import { Flock } from "@opencode-ai/core/util/flock"
+import { AppFileSystem } from "@ircoder/core/filesystem"
+import { Flock } from "@ircoder/core/util/flock"
 import { Git } from "@/git"
 import {
   repositoryCachePath,
@@ -99,7 +99,7 @@ export interface Interface {
   ensure: (input: EnsureInput) => Effect.Effect<Result, Error>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/RepositoryCache") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/RepositoryCache") {}
 
 function statusForRepository(input: { reuse: boolean; refresh?: boolean; branchMatches?: boolean }) {
   if (!input.reuse) return "cloned" as const

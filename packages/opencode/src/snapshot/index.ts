@@ -2,13 +2,13 @@ import { Cause, Duration, Effect, Layer, Schedule, Schema, Semaphore, Context } 
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process"
 import { formatPatch, structuredPatch } from "diff"
 import path from "path"
-import { AppProcess } from "@opencode-ai/core/process"
+import { AppProcess } from "@ircoder/core/process"
 import { InstanceState } from "@/effect/instance-state"
-import { AppFileSystem } from "@opencode-ai/core/filesystem"
-import { Hash } from "@opencode-ai/core/util/hash"
+import { AppFileSystem } from "@ircoder/core/filesystem"
+import { Hash } from "@ircoder/core/util/hash"
 import { Config } from "@/config/config"
-import { Global } from "@opencode-ai/core/global"
-import * as Log from "@opencode-ai/core/util/log"
+import { Global } from "@ircoder/core/global"
+import * as Log from "@ircoder/core/util/log"
 
 export const Patch = Schema.Struct({
   hash: Schema.String,
@@ -53,7 +53,7 @@ export interface Interface {
   readonly diffFull: (from: string, to: string) => Effect.Effect<FileDiff[]>
 }
 
-export class Service extends Context.Service<Service, Interface>()("@opencode/Snapshot") {}
+export class Service extends Context.Service<Service, Interface>()("@ircoder/Snapshot") {}
 
 export const layer: Layer.Layer<Service, never, AppFileSystem.Service | AppProcess.Service | Config.Service> =
   Layer.effect(

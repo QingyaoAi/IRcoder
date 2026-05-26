@@ -17,11 +17,11 @@ import {
   type SetSessionModeRequest,
 } from "@agentclientprotocol/sdk"
 import { Effect } from "effect"
-import type { OpencodeClient } from "@opencode-ai/sdk/v2"
+import type { IrcoderClient } from "@ircoder/sdk/v2"
 import * as ACPNextError from "./error"
 import * as ACPNextService from "./service"
 
-export function init({ sdk: _sdk }: { sdk: OpencodeClient }) {
+export function init({ sdk: _sdk }: { sdk: IrcoderClient }) {
   return {
     create: (connection: AgentSideConnection) => {
       return new Agent(ACPNextService.make({ sdk: _sdk, connection }))

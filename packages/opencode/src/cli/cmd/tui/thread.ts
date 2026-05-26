@@ -4,26 +4,26 @@ import { type rpc } from "./worker"
 import path from "path"
 import { fileURLToPath } from "url"
 import { UI } from "@/cli/ui"
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { errorMessage } from "@/util/error"
 import { withTimeout } from "@/util/timeout"
 import { withNetworkOptions, resolveNetworkOptionsNoConfig } from "@/cli/network"
 import { Filesystem } from "@/util/filesystem"
-import type { GlobalEvent } from "@opencode-ai/sdk/v2"
+import type { GlobalEvent } from "@ircoder/sdk/v2"
 import type { EventSource } from "./context/sdk"
 import { win32DisableProcessedInput, win32InstallCtrlCGuard } from "./win32"
 import { writeHeapSnapshot } from "v8"
 import { TuiConfig } from "./config/tui"
 import {
-  OPENCODE_PROCESS_ROLE,
-  OPENCODE_RUN_ID,
+  IRCODER_PROCESS_ROLE,
+  IRCODER_RUN_ID,
   ensureRunID,
   sanitizedProcessEnv,
-} from "@opencode-ai/core/util/opencode-process"
+} from "@ircoder/core/util/ircoder-process"
 import { validateSession } from "./validate-session"
 
 declare global {
-  const OPENCODE_WORKER_PATH: string
+  const IRCODER_WORKER_PATH: string
 }
 
 type RpcClient = ReturnType<typeof Rpc.client<typeof rpc>>
@@ -57,7 +57,7 @@ function createEventSource(client: RpcClient): EventSource {
 }
 
 async function target() {
-  if (typeof OPENCODE_WORKER_PATH !== "undefined") return OPENCODE_WORKER_PATH
+  if (typeof IRCODER_WORKER_PATH !== "undefined") return IRCODER_WORKER_PATH
   const dist = new URL("./cli/cmd/tui/worker.js", import.meta.url)
   if (await Filesystem.exists(fileURLToPath(dist))) return dist
   return new URL("./worker.ts", import.meta.url)
@@ -78,12 +78,12 @@ export function resolveThreadDirectory(project?: string, envPWD = process.env.PW
 
 export const TuiThreadCommand = cmd({
   command: "$0 [project]",
-  describe: "start opencode tui",
+  describe: "start ircoder tui",
   builder: (yargs) =>
     withNetworkOptions(yargs)
       .positional("project", {
         type: "string",
-        describe: "path to start opencode in",
+        describe: "path to start ircoder in",
       })
       .option("model", {
         type: "string",
@@ -139,8 +139,8 @@ export const TuiThreadCommand = cmd({
       }
       const cwd = Filesystem.resolve(process.cwd())
       const env = sanitizedProcessEnv({
-        [OPENCODE_PROCESS_ROLE]: "worker",
-        [OPENCODE_RUN_ID]: ensureRunID(),
+        [IRCODER_PROCESS_ROLE]: "worker",
+        [IRCODER_RUN_ID]: ensureRunID(),
       })
 
       const worker = new Worker(file, {

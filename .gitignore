@@ -31,3 +31,4 @@ logs/
 *.bun-build
 tsconfig.tsbuildinfo
 settings.json
+API_config.json

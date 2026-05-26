@@ -1,15 +1,15 @@
 import { RequestError, type McpServer } from "@agentclientprotocol/sdk"
 import type { ACPSessionState } from "./types"
-import * as Log from "@opencode-ai/core/util/log"
-import type { OpencodeClient } from "@opencode-ai/sdk/v2"
+import * as Log from "@ircoder/core/util/log"
+import type { IrcoderClient } from "@ircoder/sdk/v2"
 
 const log = Log.create({ service: "acp-session-manager" })
 
 export class ACPSessionManager {
   private sessions = new Map<string, ACPSessionState>()
-  private sdk: OpencodeClient
+  private sdk: IrcoderClient
 
-  constructor(sdk: OpencodeClient) {
+  constructor(sdk: IrcoderClient) {
     this.sdk = sdk
   }
 

@@ -33,10 +33,10 @@ import {
   type Usage,
 } from "@agentclientprotocol/sdk"
 
-import * as Log from "@opencode-ai/core/util/log"
+import * as Log from "@ircoder/core/util/log"
 import { pathToFileURL } from "url"
 import { Filesystem } from "@/util/filesystem"
-import { Hash } from "@opencode-ai/core/util/hash"
+import { Hash } from "@ircoder/core/util/hash"
 import { ACPSessionManager } from "./session"
 import type { ACPConfig } from "./types"
 import { ACPRuntime } from "./runtime"
@@ -47,9 +47,9 @@ import { ConfigMCP } from "@/config/mcp"
 import { Todo } from "@/session/todo"
 import { Result, Schema } from "effect"
 import { LoadAPIKeyError } from "ai"
-import type { AssistantMessage, Event, OpencodeClient, SessionMessageResponse, ToolPart } from "@opencode-ai/sdk/v2"
+import type { AssistantMessage, Event, IrcoderClient, SessionMessageResponse, ToolPart } from "@ircoder/sdk/v2"
 import { applyPatch } from "diff"
-import { InstallationVersion } from "@opencode-ai/core/installation/version"
+import { InstallationVersion } from "@ircoder/core/installation/version"
 import { ShellID } from "@/tool/shell/id"
 
 type ModeOption = { id: string; name: string; description?: string }
@@ -61,7 +61,7 @@ const DEFAULT_VARIANT_VALUE = "default"
 const log = Log.create({ service: "acp-agent" })
 
 async function getContextLimit(
-  sdk: OpencodeClient,
+  sdk: IrcoderClient,
   providerID: ProviderID,
   modelID: ModelID,
   directory: string,
@@ -81,7 +81,7 @@ async function getContextLimit(
 
 async function sendUsageUpdate(
   connection: AgentSideConnection,
-  sdk: OpencodeClient,
+  sdk: IrcoderClient,
   sessionID: string,
   directory: string,
 ): Promise<void> {
@@ -129,7 +129,7 @@ async function sendUsageUpdate(
     })
 }
 
-export function init({ sdk: _sdk }: { sdk: OpencodeClient }) {
+export function init({ sdk: _sdk }: { sdk: IrcoderClient }) {
   return {
     create: (connection: AgentSideConnection, fullConfig: ACPConfig) => {
       return new Agent(connection, fullConfig)
@@ -140,7 +140,7 @@ export function init({ sdk: _sdk }: { sdk: OpencodeClient }) {
 export class Agent implements ACPAgent {
   private connection: AgentSideConnection
   private config: ACPConfig
-  private sdk: OpencodeClient
+  private sdk: IrcoderClient
   private sessionManager: ACPSessionManager
   private eventAbort = new AbortController()
   private eventStarted = false
@@ -506,16 +506,16 @@ export class Agent implements ACPAgent {
     log.info("initialize", { protocolVersion: params.protocolVersion })
 
     const authMethod: AuthMethod = {
-      description: "Run `opencode auth login` in the terminal",
-      name: "Login with opencode",
-      id: "opencode-login",
+      description: "Run `ircoder auth login` in the terminal",
+      name: "Login with ircoder",
+      id: "ircoder-login",
     }
 
     // If client supports terminal-auth capability, use that instead.
     if (params.clientCapabilities?._meta?.["terminal-auth"] === true) {
       authMethod._meta = {
         "terminal-auth": {
-          command: "opencode",
+          command: "ircoder",
           args: ["auth", "login"],
           label: "OpenCode Login",
         },
@@ -1695,9 +1695,9 @@ async function defaultModel(config: ACPConfig, cwd?: string): Promise<{ provider
   const lastUsed = await lastUsedModel(sdk, directory, providers)
   if (lastUsed) return lastUsed
 
-  const opencodeProvider = providers.find((p) => p.id === "opencode")
-  if (opencodeProvider) {
-    const [best] = Provider.sort(Object.values(opencodeProvider.models))
+  const ircoderProvider = providers.find((p) => p.id === "ircoder")
+  if (ircoderProvider) {
+    const [best] = Provider.sort(Object.values(ircoderProvider.models))
     if (best) {
       return {
         providerID: ProviderID.make(best.providerID),
@@ -1720,7 +1720,7 @@ async function defaultModel(config: ACPConfig, cwd?: string): Promise<{ provider
 }
 
 async function lastUsedModel(
-  sdk: OpencodeClient,
+  sdk: IrcoderClient,
   directory: string,
   providers: Array<{ id: string; models: Record<string, unknown> }>,
 ): Promise<{ providerID: ProviderID; modelID: ModelID } | undefined> {
@@ -1866,7 +1866,7 @@ function buildVariantMeta(input: {
   availableVariants: string[]
 }) {
   return {
-    opencode: {
+    ircoder: {
       modelId: `${input.model.providerID}/${input.model.modelID}`,
       variant: input.variant ?? null,
       availableVariants: input.availableVariants,
