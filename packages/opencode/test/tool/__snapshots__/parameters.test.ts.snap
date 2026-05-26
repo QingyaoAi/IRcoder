@@ -304,7 +304,7 @@ exports[`tool parameters JSON Schema (wire shape) skill 1`] = `
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "properties": {
     "name": {
-      "description": "The name of the skill from available_skills",
+      "description": "The name of the skill to load. May be either a locally-installed skill or a skill returned by a recent \`skill_search\` call (in which case it will be installed on demand).",
       "type": "string",
     },
   },

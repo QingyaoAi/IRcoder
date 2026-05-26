@@ -15,6 +15,7 @@ import type { Provider } from "@/provider/provider"
 import type { Agent } from "@/agent/agent"
 import { Permission } from "@/permission"
 import { Skill } from "@/skill"
+import { Retrieval } from "@/skill/retrieval"
 
 export function provider(model: Provider.Model) {
   if (model.api.id.includes("gpt-4") || model.api.id.includes("o1") || model.api.id.includes("o3"))
@@ -43,6 +44,7 @@ export const layer = Layer.effect(
   Service,
   Effect.gen(function* () {
     const skill = yield* Skill.Service
+    const retrieval = yield* Retrieval.Service
 
     return Service.of({
       environment: Effect.fn("SystemPrompt.environment")(function* (model: Provider.Model) {
@@ -65,8 +67,16 @@ export const layer = Layer.effect(
       skills: Effect.fn("SystemPrompt.skills")(function* (agent: Agent.Info) {
         if (Permission.disabled(["skill"], agent.permission).has("skill")) return
 
-        const list = yield* skill.available(agent)
+        // When the retrieval API is enabled, don't dump every locally-installed skill into the
+        // system prompt — the agent uses `skill_search` to discover skills on demand.
+        if (yield* retrieval.enabled()) {
+          return [
+            "Skills provide specialized instructions and workflows for specific tasks.",
+            "Before starting any non-trivial task, call the `skill_search` tool with a focused description of the task to find relevant skills. Then call the `skill` tool with `name=<...>` to load one. Skills the system already has installed can also be loaded by name directly if you know it.",
+          ].join("\n")
+        }
 
+        const list = yield* skill.available(agent)
         return [
           "Skills provide specialized instructions and workflows for specific tasks.",
           "Use the skill tool to load a skill when a task matches its description.",
@@ -79,6 +89,9 @@ export const layer = Layer.effect(
   }),
 )
 
-export const defaultLayer = layer.pipe(Layer.provide(Skill.defaultLayer))
+export const defaultLayer = layer.pipe(
+  Layer.provide(Skill.defaultLayer),
+  Layer.provide(Retrieval.defaultLayer),
+)
 
 export * as SystemPrompt from "./system"

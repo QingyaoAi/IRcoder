@@ -257,7 +257,10 @@ function withFakeLlm<A, E>(serverPath: ServerPath, run: (input: LlmProjectFixtur
 
 function withFakeLlmProject<A, E>(
   serverPath: ServerPath,
-  options: { setup?: (dir: string) => Effect.Effect<void, E, TestServices> },
+  options: {
+    setup?: (dir: string) => Effect.Effect<void, E, TestServices>
+    config?: Partial<Config.Info>
+  },
   run: (input: LlmProjectFixture) => Effect.Effect<A, E, TestScope>,
 ) {
   return Effect.gen(function* () {
@@ -265,7 +268,7 @@ function withFakeLlmProject<A, E>(
     return yield* withProject(
       serverPath,
       {
-        config: testProviderConfig(llm.url),
+        config: { ...testProviderConfig(llm.url), ...options.config },
         setup: options.setup,
       },
       (input) => run({ ...input, llm }),
@@ -777,7 +780,12 @@ describe("HttpApi SDK", () => {
 
   httpapi(
     "includes project skills in REST API prompt context",
-    withFakeLlmProject("default", { setup: writeProjectSkill }, ({ sdk, llm }) =>
+    withFakeLlmProject(
+      "default",
+      // This assertion targets the enumeration path; disable retrieval so the prompt embeds the
+      // skill name. Retrieval-on coverage lives in test/session/system.test.ts.
+      { setup: writeProjectSkill, config: { skills: { retrieval: { enabled: false } } } },
+      ({ sdk, llm }) =>
       Effect.gen(function* () {
         yield* llm.text("skill context ok", { usage: { input: 11, output: 7 } })
         const session = yield* capture(() =>

@@ -115,6 +115,9 @@ export const layer = Layer.effect(
           plan_exit: "deny",
           repo_clone: "deny",
           repo_overview: "deny",
+          // Installing a skill shells out to `npx skills add` against an arbitrary GitHub repo.
+          // Default to ask so the user sees the repo name before code from it runs.
+          skill_install: "ask",
           // mirrors github.com/github/gitignore Node.gitignore pattern for .env files
           read: {
             "*": "allow",

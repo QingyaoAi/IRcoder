@@ -12,6 +12,7 @@ import { WebFetchTool } from "./webfetch"
 import { WriteTool } from "./write"
 import { InvalidTool } from "./invalid"
 import { SkillTool } from "./skill"
+import { SkillSearchTool } from "./skill_search"
 import * as Tool from "./tool"
 import { Config } from "@/config/config"
 import { type ToolContext as PluginToolContext, type ToolDefinition } from "@opencode-ai/plugin"
@@ -49,6 +50,7 @@ import { Bus } from "../bus"
 import { Agent } from "../agent/agent"
 import { Git } from "@/git"
 import { Skill } from "../skill"
+import { Retrieval } from "../skill/retrieval"
 import { Permission } from "@/permission"
 import { Reference } from "@/reference/reference"
 import { BackgroundJob } from "@/background/job"
@@ -88,6 +90,7 @@ export const layer: Layer.Layer<
   | Todo.Service
   | Agent.Service
   | Skill.Service
+  | Retrieval.Service
   | Session.Service
   | BackgroundJob.Service
   | Provider.Service
@@ -111,6 +114,7 @@ export const layer: Layer.Layer<
     const plugin = yield* Plugin.Service
     const agents = yield* Agent.Service
     const skill = yield* Skill.Service
+    const retrieval = yield* Retrieval.Service
     const truncate = yield* Truncate.Service
     const flags = yield* RuntimeFlags.Service
 
@@ -132,6 +136,7 @@ export const layer: Layer.Layer<
     const greptool = yield* GrepTool
     const patchtool = yield* ApplyPatchTool
     const skilltool = yield* SkillTool
+    const skillsearchtool = yield* SkillSearchTool
     const agent = yield* Agent.Service
 
     const state = yield* InstanceState.make<State>(
@@ -237,6 +242,7 @@ export const layer: Layer.Layer<
           repo_clone: Tool.init(repoClone),
           repo_overview: Tool.init(repoOverview),
           skill: Tool.init(skilltool),
+          skill_search: Tool.init(skillsearchtool),
           patch: Tool.init(patchtool),
           question: Tool.init(question),
           lsp: Tool.init(lsptool),
@@ -260,6 +266,7 @@ export const layer: Layer.Layer<
             tool.search,
             ...(flags.experimentalScout ? [tool.repo_clone, tool.repo_overview] : []),
             tool.skill,
+            tool.skill_search,
             tool.patch,
             ...(flags.experimentalLspTool ? [tool.lsp] : []),
             ...(flags.experimentalPlanMode && flags.client === "cli" ? [tool.plan] : []),
@@ -280,6 +287,17 @@ export const layer: Layer.Layer<
     })
 
     const describeSkill = Effect.fn("ToolRegistry.describeSkill")(function* (agent: Agent.Info) {
+      // With retrieval enabled, the skill catalog comes from `skill_search`; the tool
+      // description only needs to explain the load-by-name contract so the model doesn't
+      // try to invent names without searching first.
+      if (yield* retrieval.enabled()) {
+        return [
+          "Load a specialized skill by name. The name must either be a locally-installed skill or one returned by a recent `skill_search` call (which will be installed on demand).",
+          "",
+          "Use this AFTER `skill_search` returns a result you want to load, or when you already know the name of a locally-installed skill. Output includes a `<skill_content name=\"...\">` block with the full instructions and any bundled resources.",
+        ].join("\n")
+      }
+
       const list = yield* skill.available(agent)
       if (list.length === 0) return "No skills are currently available."
       return [
@@ -314,10 +332,15 @@ export const layer: Layer.Layer<
     })
 
     const tools: Interface["tools"] = Effect.fn("ToolRegistry.tools")(function* (input) {
+      const retrievalEnabled = yield* retrieval.enabled()
       const filtered = (yield* all()).filter((tool) => {
         if (tool.id === WebSearchTool.id) {
           return webSearchEnabled(input.providerID, { exa: flags.enableExa, parallel: flags.enableParallel })
         }
+
+        // `skill_search` only makes sense if the retrieval API is on. When off, the system prompt
+        // falls back to enumerating installed skills directly.
+        if (tool.id === SkillSearchTool.id) return retrievalEnabled
 
         const usePatch =
           input.modelID.includes("gpt-") && !input.modelID.includes("oss") && !input.modelID.includes("gpt-4")
@@ -377,6 +400,7 @@ export const defaultLayer = Layer.suspend(() =>
       Layer.provide(Question.defaultLayer),
       Layer.provide(Todo.defaultLayer),
       Layer.provide(Skill.defaultLayer),
+      Layer.provide(Retrieval.defaultLayer),
       Layer.provide(Agent.defaultLayer),
       Layer.provide(Session.defaultLayer),
       Layer.provide(BackgroundJob.defaultLayer),

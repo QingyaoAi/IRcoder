@@ -3,6 +3,7 @@ import { Effect, Layer } from "effect"
 import type { Agent } from "../../src/agent/agent"
 import { NamedError } from "@opencode-ai/core/util/error"
 import { Skill } from "../../src/skill"
+import { Retrieval } from "../../src/skill/retrieval"
 import { Permission } from "../../src/permission"
 import { SystemPrompt } from "../../src/session/system"
 import { testEffect } from "../lib/effect"
@@ -40,25 +41,49 @@ const build: Agent.Info = {
   options: {},
 }
 
-const it = testEffect(
-  SystemPrompt.layer.pipe(
-    Layer.provide(
-      Layer.succeed(
-        Skill.Service,
-        Skill.Service.of({
-          get: (name) => Effect.succeed(skills.find((skill) => skill.name === name)),
-          require: (name) => {
-            const info = skills.find((skill) => skill.name === name)
-            if (info) return Effect.succeed(info)
-            return Effect.fail(new Skill.NotFoundError({ name, available: skills.map((skill) => skill.name) }))
-          },
-          all: () => Effect.succeed(skills),
-          dirs: () => Effect.succeed([]),
-          available: () => Effect.succeed(skills),
-        }),
-      ),
-    ),
-  ),
+// This test asserts the enumeration path (alpha/middle/zeta sort order embedded in the prompt),
+// so we force retrieval off — when retrieval is on, the prompt no longer lists skills.
+const fakeSkill = Layer.succeed(
+  Skill.Service,
+  Skill.Service.of({
+    get: (name) => Effect.succeed(skills.find((skill) => skill.name === name)),
+    require: (name) => {
+      const info = skills.find((skill) => skill.name === name)
+      if (info) return Effect.succeed(info)
+      return Effect.fail(new Skill.NotFoundError({ name, available: skills.map((skill) => skill.name) }))
+    },
+    all: () => Effect.succeed(skills),
+    dirs: () => Effect.succeed([]),
+    available: () => Effect.succeed(skills),
+    refresh: () => Effect.void,
+  }),
+)
+
+const fakeRetrieval = Layer.succeed(
+  Retrieval.Service,
+  Retrieval.Service.of({
+    enabled: () => Effect.succeed(false),
+    search: () =>
+      Effect.die(new Error("retrieval search should not be invoked when enabled() returns false")),
+    lookup: () => Effect.succeed(undefined),
+    lastResults: () => Effect.succeed([]),
+  }),
+)
+
+const it = testEffect(SystemPrompt.layer.pipe(Layer.provide(fakeSkill), Layer.provide(fakeRetrieval)))
+
+const fakeRetrievalEnabled = Layer.succeed(
+  Retrieval.Service,
+  Retrieval.Service.of({
+    enabled: () => Effect.succeed(true),
+    search: () => Effect.die(new Error("not used in this test")),
+    lookup: () => Effect.succeed(undefined),
+    lastResults: () => Effect.succeed([]),
+  }),
+)
+
+const itRetrieval = testEffect(
+  SystemPrompt.layer.pipe(Layer.provide(fakeSkill), Layer.provide(fakeRetrievalEnabled)),
 )
 
 describe("session.system", () => {
@@ -79,6 +104,18 @@ describe("session.system", () => {
       expect(middle).toBeGreaterThan(alpha)
       expect(zeta).toBeGreaterThan(middle)
       expect(output).not.toContain("manual-skill")
+    }),
+  )
+
+  itRetrieval.effect("skills output omits enumeration when retrieval is enabled", () =>
+    Effect.gen(function* () {
+      const prompt = yield* SystemPrompt.Service
+      const output = yield* prompt.skills(build)
+      expect(output).toBeDefined()
+      expect(output).not.toContain("alpha-skill")
+      expect(output).not.toContain("middle-skill")
+      expect(output).not.toContain("zeta-skill")
+      expect(output).toContain("skill_search")
     }),
   )
 })

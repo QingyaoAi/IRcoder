@@ -1,0 +1,11 @@
+Search for specialized skills that match the current task.
+
+Skills are reusable, domain-specific instruction sets (file format handling, document workflows, code review, security audit, etc). Before doing any non-trivial work where a skill might exist, call this tool with a focused description of what you are trying to accomplish. The result lists relevant skills with their `name`, `description`, `when_to_use`, GitHub star count, and whether they are already installed locally.
+
+To then load a skill returned by this tool, call the `skill` tool with `name=<...>`. If the skill is not installed locally yet, the `skill` tool will install it on demand (subject to user permission).
+
+Guidelines:
+- Use this tool BEFORE starting tasks involving: PDF/DOCX/XLSX/PPTX, web scraping, code review/security audits, API integrations, paper rebuttals, academic reviews, slack/email integrations, or any specialized domain work.
+- Pass a concise, task-focused query. Prefer one main `description` over duplicating the same text into every field.
+- Do not call this tool for trivial operations (basic file reads, simple git commands, plain text edits).
+- One call per task is usually enough. Refine and call again only if the first results do not match the intent.

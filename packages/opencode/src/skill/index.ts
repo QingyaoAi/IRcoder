@@ -99,6 +99,7 @@ export interface Interface {
   readonly all: () => Effect.Effect<Info[]>
   readonly dirs: () => Effect.Effect<string[]>
   readonly available: (agent?: Agent.Info) => Effect.Effect<Info[]>
+  readonly refresh: () => Effect.Effect<void>
 }
 
 const add = Effect.fnUntraced(function* (state: State, match: string, bus: Bus.Interface) {
@@ -310,7 +311,15 @@ export const layer = Layer.effect(
       return list.filter((skill) => Permission.evaluate("skill", skill.name, agent.permission).action !== "deny")
     })
 
-    return Service.of({ get, require, all, dirs, available })
+    // Drop cached discovery + parsed state so the next access re-scans disk. Used after
+    // installing a new skill via `npx skills add` so the freshly-written SKILL.md is picked up
+    // without restarting the instance.
+    const refresh = Effect.fn("Skill.refresh")(function* () {
+      yield* InstanceState.invalidate(state)
+      yield* InstanceState.invalidate(discovered)
+    })
+
+    return Service.of({ get, require, all, dirs, available, refresh })
   }),
 )
 
