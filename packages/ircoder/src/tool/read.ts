@@ -10,7 +10,9 @@ import { assertExternalDirectoryEffect } from "./external-directory"
 import { Instruction } from "../session/instruction"
 import { isPdfAttachment, sniffAttachmentMime } from "@/util/media"
 import { Reference } from "@/reference/reference"
+import { Config } from "@/config/config"
 
+const DEFAULT_PDF_MAX_BYTES = 1024 * 1024 // 1 MB — keeps base64 payload under ~1.4 MB
 const DEFAULT_READ_LIMIT = 2000
 const MAX_LINE_LENGTH = 2000
 const MAX_LINE_SUFFIX = `... (line truncated to ${MAX_LINE_LENGTH} chars)`
@@ -267,14 +269,50 @@ export const ReadTool = Tool.define(
       const mime = sniffAttachmentMime(sample, AppFileSystem.mimeType(filepath))
       const isImage = SUPPORTED_IMAGE_MIMES.has(mime)
 
-      if (isImage || isPdfAttachment(mime)) {
+      if (isPdfAttachment(mime)) {
+        const cfg = yield* Effect.serviceOption(Config.Service)
+        const maxPdfBytes = Option.isSome(cfg)
+          ? (cfg.value.attachment?.pdf?.max_bytes ?? DEFAULT_PDF_MAX_BYTES)
+          : DEFAULT_PDF_MAX_BYTES
+        if (Number(stat.size) > maxPdfBytes) {
+          const limitMb = (maxPdfBytes / (1024 * 1024)).toFixed(1)
+          const fileMb = (Number(stat.size) / (1024 * 1024)).toFixed(1)
+          return {
+            title,
+            output: [
+              `PDF too large to attach (${fileMb} MB > limit ${limitMb} MB).`,
+              `To raise the limit set attachment.pdf.max_bytes in your ircoder config.`,
+              `To read a portion of the extracted text, convert the PDF to text first (e.g. pdftotext ${filepath} - | head -200).`,
+            ].join("\n"),
+            metadata: { preview: "PDF too large", truncated: false, loaded: [] as string[] },
+          }
+        }
         const bytes = yield* fs.readFile(filepath)
-        const msg = isPdfAttachment(mime) ? "PDF read successfully" : "Image read successfully"
         return {
           title,
-          output: msg,
+          output: "PDF read successfully",
           metadata: {
-            preview: msg,
+            preview: "PDF read successfully",
+            truncated: false,
+            loaded: loaded.map((item) => item.filepath),
+          },
+          attachments: [
+            {
+              type: "file" as const,
+              mime,
+              url: `data:${mime};base64,${Buffer.from(bytes).toString("base64")}`,
+            },
+          ],
+        }
+      }
+
+      if (isImage) {
+        const bytes = yield* fs.readFile(filepath)
+        return {
+          title,
+          output: "Image read successfully",
+          metadata: {
+            preview: "Image read successfully",
             truncated: false,
             loaded: loaded.map((item) => item.filepath),
           },

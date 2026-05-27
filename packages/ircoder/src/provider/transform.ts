@@ -130,6 +130,10 @@ function normalizeMessages(
   // Anthropic rejects messages with empty content - filter out empty string messages
   // and remove empty text/reasoning parts from array content
   if (model.api.npm === "@ai-sdk/anthropic") {
+    // When the model has interleaved thinking disabled, strip ALL reasoning parts
+    // from history so they don't inflate the request body (e.g. proxy models that
+    // don't support thinking but share the Anthropic SDK path).
+    const stripAllReasoning = model.capabilities.interleaved === false
     msgs = msgs
       .map((msg) => {
         if (typeof msg.content === "string") {
@@ -142,6 +146,7 @@ function normalizeMessages(
             return part.text !== ""
           }
           if (part.type === "reasoning") {
+            if (stripAllReasoning) return false
             return (
               part.text.trim().length > 0 ||
               part.providerOptions?.anthropic?.signature != null ||
