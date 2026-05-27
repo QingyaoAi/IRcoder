@@ -272,7 +272,7 @@ export const ReadTool = Tool.define(
       if (isPdfAttachment(mime)) {
         const cfg = yield* Effect.serviceOption(Config.Service)
         const maxPdfBytes = Option.isSome(cfg)
-          ? (cfg.value.attachment?.pdf?.max_bytes ?? DEFAULT_PDF_MAX_BYTES)
+          ? ((yield* cfg.value.get()).attachment?.pdf?.max_bytes ?? DEFAULT_PDF_MAX_BYTES)
           : DEFAULT_PDF_MAX_BYTES
         if (Number(stat.size) > maxPdfBytes) {
           const limitMb = (maxPdfBytes / (1024 * 1024)).toFixed(1)
